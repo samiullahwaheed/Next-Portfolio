@@ -11,7 +11,7 @@ const contactItems = [
   { icon: 'location' as IconName, title: 'Office', content: 'Islamabad' },
   { icon: 'email' as IconName, title: 'Email', content: 'samiullahwaheed@gmail.com', href: 'mailto:samiullahwaheed@gmail.com' },
   { icon: 'linkedin' as IconName, title: 'LinkedIn', content: 'in/samiullah-waheed', href: 'https://www.linkedin.com/in/samiullah-waheed/' },
-  { icon: 'github' as IconName, title: 'GitHub', content: 'DarkHorse786', href: 'https://github.com/DarkHorse786' },
+  { icon: 'github' as IconName, title: 'GitHub', content: 'SamiullahWaheed', href: 'https://github.com/SamiullahWaheed' },
 ]
 
 export function ContactSection() {

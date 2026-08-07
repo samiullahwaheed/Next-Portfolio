@@ -19,7 +19,7 @@ export function HomeSection({ roleIndex }: { roleIndex: number }) {
           <div className="mt-10 flex flex-wrap gap-4">
             <a href="/portfolio/Samiullah-Waheed-Resume.pdf" download className="inline-flex items-center gap-2 rounded-full bg-rose-600 px-6 py-3 font-semibold text-white shadow-lg shadow-rose-600/20 transition hover:scale-105">
               <Icon name="download" />
-              Download CV
+              My Resume
             </a>
             <a href="#contact" className="rounded-full border-2 border-rose-600 px-7 py-3 font-semibold text-rose-600 transition hover:bg-rose-600 hover:text-white">
               Hire Me
