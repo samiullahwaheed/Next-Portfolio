@@ -12,6 +12,11 @@ node_modules
 out
 *.local
 
+# env files (secrets) — keep the template committed
+.env
+.env*.local
+!.env.example
+
 # TypeScript
 next-env.d.ts
 

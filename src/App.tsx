@@ -93,7 +93,26 @@ function App() {
     document.querySelectorAll('.reveal-item').forEach((element) => {
       revealObserver.observe(element)
     })
-    return () => revealObserver.disconnect()
+
+    // Sections like Portfolio render their .reveal-item cards after an async
+    // fetch resolves, i.e. after this observer has already done its initial
+    // scan — watch for those late-arriving elements too, or they'd stay stuck
+    // at opacity: 0 forever (still clickable, just invisible).
+    const mutationObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (!(node instanceof HTMLElement)) return
+          if (node.matches('.reveal-item')) revealObserver.observe(node)
+          node.querySelectorAll('.reveal-item').forEach((element) => revealObserver.observe(element))
+        })
+      })
+    })
+    mutationObserver.observe(document.body, { childList: true, subtree: true })
+
+    return () => {
+      revealObserver.disconnect()
+      mutationObserver.disconnect()
+    }
   }, [])
 
   useEffect(() => {

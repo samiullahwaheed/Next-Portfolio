@@ -1,27 +1,9 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Icon } from "../ui/Icon";
 import { AdminLoginModal } from "../admin/AdminLoginModal";
 
-const SECRET_CLICKS = 5
-const SECRET_WINDOW_MS = 2000
-
 export function Footer() {
   const [loginOpen, setLoginOpen] = useState(false)
-  const clickCount = useRef(0)
-  const resetTimer = useRef<number | undefined>(undefined)
-
-  const handleSecretTrigger = () => {
-    clickCount.current += 1
-    if (resetTimer.current) window.clearTimeout(resetTimer.current)
-    resetTimer.current = window.setTimeout(() => {
-      clickCount.current = 0
-    }, SECRET_WINDOW_MS)
-
-    if (clickCount.current >= SECRET_CLICKS) {
-      clickCount.current = 0
-      setLoginOpen(true)
-    }
-  }
 
   return (
     <footer className="border-t border-slate-200 bg-white px-5 py-9 dark:border-slate-700/50 dark:bg-[#030b16]">
@@ -54,11 +36,17 @@ export function Footer() {
           >
             <Icon name="github" />
           </a>
+          <button
+            type="button"
+            onClick={() => setLoginOpen(true)}
+            aria-label="Admin login"
+            title="Admin login"
+            className="grid size-10 place-items-center rounded-full border border-slate-200 text-slate-400 transition hover:border-[var(--accent)] hover:bg-[var(--accent)] hover:text-white dark:border-slate-700 dark:text-slate-500"
+          >
+            <Icon name="lock" className="size-4" />
+          </button>
         </div>
-        <p
-          className="w-full select-none border-t border-slate-200 pt-5 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400"
-          onClick={handleSecretTrigger}
-        >
+        <p className="w-full border-t border-slate-200 pt-5 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
           Copyright © {new Date().getFullYear()} <span className="text-[var(--accent)]"> Samiullah Waheed .</span> All rights reserved.
         </p>
       </div>
