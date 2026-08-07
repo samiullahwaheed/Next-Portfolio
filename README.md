@@ -50,74 +50,81 @@ npm run build
 
 ## Development
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is built with [Next.js](https://nextjs.org) (App Router) and TypeScript.
 
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev    # start the dev server
+npm run build  # production build
+npm run start  # run the production build
+npm run lint   # run ESLint
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Dynamic Projects & Admin Panel
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The Projects section is backed by MongoDB instead of a static file, with a hidden admin
+panel for managing project data. This section explains how the moving parts fit together.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Environment setup
+
+Copy `.env.example` to `.env.local` and fill in:
+
+- `MONGODB_URI` — a MongoDB Atlas connection string.
+- `JWT_SECRET` — any long random string, used to sign the admin session token.
+- `ADMIN_EMAIL` / `ADMIN_PASSWORD` — the single admin login. Only read once, by the seed
+  script below, to create the hashed `Admin` document — not used at runtime after that.
+- `CLOUDINARY_CLOUD_NAME` / `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` — from your
+  Cloudinary dashboard's "Account Details" panel.
+
+### 2. Seed the database
+
+```bash
+npm run seed
 ```
+
+This one-time migration script (`scripts/seed.mjs`):
+
+- Uploads the images in `public/portfolio/projects/**` to Cloudinary under the
+  `portfolio/projects` folder.
+- Creates the four projects that used to be hardcoded in `src/data/portfolio.tsx` in the
+  `projects` MongoDB collection, with a best-guess `category` assigned from each
+  project's tech stack (correct these from `/admin/dashboard` if needed).
+- Creates the single `Admin` document from `ADMIN_EMAIL` / `ADMIN_PASSWORD`, with the
+  password bcrypt-hashed before it's stored.
+
+It's safe to re-run — projects are upserted by `title` and the admin by `email`, so
+re-running won't create duplicates.
+
+### 3. How auth works
+
+- `POST /api/auth/login` checks the submitted credentials against the `Admin` collection
+  (bcrypt compare) and, on success, signs a JWT (`src/lib/auth.ts`) and sets it as an
+  `httpOnly` cookie (`admin_token`).
+- `src/proxy.ts` (the Next.js 16 replacement for `middleware.ts`) checks that cookie on
+  every request to `/admin/dashboard/*` and redirects unauthenticated visitors to `/`.
+- Mutating API routes (`POST`/`PUT`/`DELETE` under `/api/projects` and
+  `POST /api/upload`) independently verify the same cookie via `requireAdmin()` in
+  `src/lib/auth.ts`, so they're protected even if hit directly.
+- `POST /api/auth/logout` clears the cookie.
+
+To reach the login modal, click the footer's copyright line 5 times within 2 seconds
+(see `src/components/layout/Footer.tsx`) — there's no visible link to it.
+
+### 4. How Cloudinary is wired up
+
+- `src/lib/cloudinary.ts` configures the SDK from the `CLOUDINARY_*` env vars.
+- `POST /api/upload` (admin-only) accepts a single file, validates its type
+  (jpg/png/webp) and size (≤5MB), and uploads it to the `portfolio/projects` folder,
+  returning `{ url, publicId }`.
+- The admin dashboard's project form (`src/components/admin/ProjectFormModal.tsx`)
+  calls `/api/upload` per selected file and stores the returned `{url, publicId}` pairs
+  on the project document (a project can have multiple images — they open in the same
+  gallery modal the public site already used).
+- Deleting a project, or removing an image from it during an edit, deletes the
+  matching Cloudinary asset via its `publicId` (see `src/app/api/projects/[id]/route.ts`)
+  so nothing is orphaned in the media library.
+
+### 5. Data model
+
+See `src/models/Project.ts` for the full schema. Categories are one or more of:
+`Mobile App`, `Web App`, `WordPress`, `Flutter`, `React`, `Next.js`, `Frontend`,
+`Full Stack` — these also power the filter tabs on the public Projects section.

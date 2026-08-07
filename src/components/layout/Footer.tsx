@@ -1,6 +1,28 @@
+import { useRef, useState } from "react";
 import { Icon } from "../ui/Icon";
+import { AdminLoginModal } from "../admin/AdminLoginModal";
+
+const SECRET_CLICKS = 5
+const SECRET_WINDOW_MS = 2000
 
 export function Footer() {
+  const [loginOpen, setLoginOpen] = useState(false)
+  const clickCount = useRef(0)
+  const resetTimer = useRef<number | undefined>(undefined)
+
+  const handleSecretTrigger = () => {
+    clickCount.current += 1
+    if (resetTimer.current) window.clearTimeout(resetTimer.current)
+    resetTimer.current = window.setTimeout(() => {
+      clickCount.current = 0
+    }, SECRET_WINDOW_MS)
+
+    if (clickCount.current >= SECRET_CLICKS) {
+      clickCount.current = 0
+      setLoginOpen(true)
+    }
+  }
+
   return (
     <footer className="border-t border-slate-200 bg-white px-5 py-9 dark:border-slate-700/50 dark:bg-[#030b16]">
       <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-5 max-sm:justify-center max-sm:text-center">
@@ -33,10 +55,14 @@ export function Footer() {
             <Icon name="github" />
           </a>
         </div>
-        <p className="w-full border-t border-slate-200 pt-5 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
+        <p
+          className="w-full select-none border-t border-slate-200 pt-5 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400"
+          onClick={handleSecretTrigger}
+        >
           Copyright © {new Date().getFullYear()} <span className="text-[var(--accent)]"> Samiullah Waheed .</span> All rights reserved.
         </p>
       </div>
+      {loginOpen && <AdminLoginModal onClose={() => setLoginOpen(false)} />}
     </footer>
   );
 }

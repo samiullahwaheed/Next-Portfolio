@@ -8,7 +8,7 @@ import { ContactSection } from './components/sections/ContactSection'
 import { HomeSection } from './components/sections/HomeSection'
 import { PortfolioSection } from './components/sections/PortfolioSection'
 import { ServicesSection } from './components/sections/ServicesSection'
-import { navItems, roles } from './data/portfolio.tsx'
+import { navItems, roles } from './data/portfolio'
 import type { GalleryState } from './types/portfolio'
 
 function App() {

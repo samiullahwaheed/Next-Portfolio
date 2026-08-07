@@ -40,14 +40,6 @@ export type TimelineEntry = {
   description: ReactNode
 }
 
-export type Project = {
-  title: string
-  description: string
-  tech: string[]
-  url: string
-  images: string[]
-}
-
 export type GalleryState = {
   title: string
   images: string[]

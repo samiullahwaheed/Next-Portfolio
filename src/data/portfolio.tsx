@@ -1,4 +1,4 @@
-import type { IconName, Project, TimelineEntry } from '../types/portfolio'
+import type { IconName, TimelineEntry } from '../types/portfolio'
 
 export const navItems: Array<{ label: string; href: string; icon: IconName }> = [
   { label: 'Home', href: '#home', icon: 'home' },
@@ -136,39 +136,5 @@ export const services = [
   { title: 'Digital Marketing', icon: 'marketing' as IconName, description: 'Promoting brands and products through digital channels to reach and engage target audiences.' },
 ]
 
-const projectPath = '/portfolio/projects'
-
-export const projects: Project[] = [
-  {
-    title: 'CryptoVerse',
-    description:
-      'Developed a React-based cryptocurrency web application that provides real-time data, detailed statistics, and insights for global cryptocurrencies. Integrated APIs for live market updates, designed a responsive interface, and implemented user-friendly navigation for exploring coins and trends.',
-    tech: ['React.js', 'Tailwind CSS', 'Cloudinary', 'Redux', 'RESTful APIs'],
-    url: 'https://cryptoverse786.netlify.app/',
-    images: [1, 2, 3].map((number) => `${projectPath}/CryptoVerse/${number}.png`),
-  },
-  {
-    title: 'Movieo',
-    description:
-      'Developed a dynamic web application that allows users to search, browse, and explore detailed information about movies and TV shows. Integrated the TMDB API for real-time ratings, genres, and descriptions, with a responsive interface across devices.',
-    tech: ['React.js', 'Node.js', 'Cloudinary', 'TMDB API', 'Tailwind CSS'],
-    url: 'https://movieo786.vercel.app/',
-    images: [1, 2, 3, 4].map((number) => `${projectPath}/Movieo/${number}.png`),
-  },
-  {
-    title: 'QuickChat',
-    description:
-      'Built a real-time MERN chat app with JWT authentication and Socket.io. Designed a responsive React UI, managed state with Redux and Context APIs, developed RESTful APIs with Express and MongoDB, and added friend requests, group chat, and Meta AI.',
-    tech: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'Cloudinary', 'Redux', 'WebSockets', 'Meta AI', 'JWT', 'Socket.io'],
-    url: 'https://mern-chatapp-786.onrender.com/',
-    images: Array.from({ length: 10 }, (_, index) => `${projectPath}/QuickChat/${index + 1}.png`),
-  },
-  {
-    title: 'Skill Exchange',
-    description:
-      'Developed a platform for exchanging skills and services through AI-powered matching. It includes secure authentication, chat, scheduling, feedback, barter and monetary transactions, agreements, ratings, and Stripe payments.',
-    tech: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'Cloudinary', 'Socket.io', 'JWT', 'Stripe'],
-    url: 'https://www.linkedin.com/posts/samiullah-waheed_fullstackdeveloper-mernstack-socketio-activity-7415096227408642048-Wwqm',
-    images: Array.from({ length: 10 }, (_, index) => `${projectPath}/Skill_Exchange/${index + 1}.png`),
-  },
-]
+// Projects have moved to MongoDB — see src/models/Project.ts and scripts/seed.mjs for the
+// one-time migration of the data that used to live in this file.
