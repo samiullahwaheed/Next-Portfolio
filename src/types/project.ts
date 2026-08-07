@@ -1,12 +1,13 @@
 export const PROJECT_CATEGORIES = [
-  'Mobile App',
   'Web App',
-  'WordPress',
-  'Flutter',
-  'React',
-  'Next.js',
-  'Frontend',
+  'Mobile App',
   'Full Stack',
+  'AI Agents',
+  'Automation (n8n)',
+  'RAG Apps',
+  'Next.js',
+  'Flutter',
+  'WordPress',
 ] as const
 
 export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number]

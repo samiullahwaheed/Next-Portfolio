@@ -60,10 +60,7 @@ const Admin = mongoose.models.Admin ?? mongoose.model('Admin', AdminSchema)
 function categorizeProject(tech) {
   const categories = new Set(['Web App'])
   const hasBackend = tech.some((item) => ['Node.js', 'Express.js', 'Laravel'].includes(item))
-  const hasReact = tech.includes('React.js')
-  if (hasReact) categories.add('React')
-  if (hasReact && hasBackend) categories.add('Full Stack')
-  if (hasReact && !hasBackend) categories.add('Frontend')
+  if (hasBackend) categories.add('Full Stack')
   return Array.from(categories)
 }
 

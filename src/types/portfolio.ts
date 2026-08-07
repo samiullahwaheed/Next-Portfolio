@@ -33,6 +33,7 @@ export type IconName =
   | 'paletteControl'
   | 'up'
   | 'lock'
+  | 'check'
 
 export type TimelineEntry = {
   organization: string

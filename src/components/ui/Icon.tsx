@@ -37,6 +37,7 @@ export function Icon({ name, className = 'size-5' }: { name: IconName; className
     paletteControl: <><path d="M12 3a9 9 0 0 0 0 18h1.5a1.5 1.5 0 0 0 0-3H12a2 2 0 0 1 0-4h4a5 5 0 0 0 0-10z" /><circle cx="7.5" cy="10.5" r=".5" /><circle cx="10" cy="7" r=".5" /><circle cx="14" cy="7" r=".5" /></>,
     up: <path d="m6 15 6-6 6 6" />,
     lock: <><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></>,
+    check: <path d="M20 6 9 17l-5-5" />,
   }
 
   return (
