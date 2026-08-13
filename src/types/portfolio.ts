@@ -34,6 +34,12 @@ export type IconName =
   | 'up'
   | 'lock'
   | 'check'
+  | 'edit'
+  | 'trash'
+  | 'logout'
+  | 'star'
+  | 'grid'
+  | 'image'
 
 export type TimelineEntry = {
   organization: string

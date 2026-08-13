@@ -1,4 +1,4 @@
-import { PROJECT_CATEGORIES } from '@/models/Project'
+import { PROJECT_CATEGORIES } from '@/types/project'
 
 type ProjectImageInput = { url?: unknown; publicId?: unknown }
 

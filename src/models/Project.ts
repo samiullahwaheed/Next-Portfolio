@@ -1,16 +1,5 @@
 import { Schema, model, models, type InferSchemaType, type Model } from 'mongoose'
-
-export const PROJECT_CATEGORIES = [
-  'Web App',
-  'Mobile App',
-  'Full Stack',
-  'AI Agents',
-  'Automation (n8n)',
-  'RAG Apps',
-  'Next.js',
-  'Flutter',
-  'WordPress',
-] as const
+import { PROJECT_CATEGORIES } from '@/types/project'
 
 const ProjectImageSchema = new Schema(
   {

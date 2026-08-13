@@ -1,5 +1,6 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { PROJECT_CATEGORIES, type ProjectCategory, type ProjectDoc, type ProjectImage } from '@/types/project'
+import { Icon } from '../ui/Icon'
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
 const MAX_SIZE_BYTES = 5 * 1024 * 1024
@@ -23,6 +24,7 @@ export function ProjectFormModal({ project, onClose, onSaved }: ProjectFormModal
   const [uploading, setUploading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const toggleCategory = (value: ProjectCategory) => {
     setCategory((current) => (current.includes(value) ? current.filter((item) => item !== value) : [...current, value]))
@@ -121,13 +123,17 @@ export function ProjectFormModal({ project, onClose, onSaved }: ProjectFormModal
   }
 
   return (
-    <div className="fixed inset-0 z-[100] grid place-items-center overflow-y-auto bg-black/70 p-5" onClick={onClose}>
+    <div className="fixed inset-0 z-[100] grid place-items-center overflow-y-auto bg-black/70 p-5" role="dialog" aria-modal="true" aria-label={project ? 'Edit Project' : 'Add New Project'}>
       <form
-        onClick={(event) => event.stopPropagation()}
         onSubmit={handleSubmit}
         className="my-8 w-full max-w-2xl rounded-xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-700 dark:bg-slate-800"
       >
-        <h2 className="mb-5 text-lg font-bold text-slate-900 dark:text-white">{project ? 'Edit Project' : 'Add New Project'}</h2>
+        <div className="mb-5 flex items-center justify-between">
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white">{project ? 'Edit Project' : 'Add New Project'}</h2>
+          <button type="button" onClick={onClose} aria-label="Close" className="grid size-8 place-items-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-rose-600 dark:hover:bg-slate-700">
+            <Icon name="close" className="size-4" />
+          </button>
+        </div>
 
         {error && <p className="mb-4 rounded-lg bg-rose-600/10 px-3 py-2 text-sm text-rose-600">{error}</p>}
 
@@ -206,8 +212,24 @@ export function ProjectFormModal({ project, onClose, onSaved }: ProjectFormModal
                 ))}
               </div>
             )}
-            <input type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={handleFileSelect} disabled={uploading} className="text-sm" />
-            {uploading && <p className="mt-2 text-xs text-slate-400">Uploading…</p>}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+              onChange={handleFileSelect}
+              disabled={uploading}
+              className="hidden"
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+              className="flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:border-rose-500 hover:text-rose-600 disabled:opacity-60 dark:border-slate-600 dark:text-slate-300"
+            >
+              <Icon name="image" className="size-4" />
+              {uploading ? 'Uploading…' : 'Choose Images'}
+            </button>
           </div>
         </div>
 

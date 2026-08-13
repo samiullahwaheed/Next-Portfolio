@@ -1,9 +1,13 @@
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Icon } from "../ui/Icon";
 import { AdminLoginModal } from "../admin/AdminLoginModal";
+import { useAdminSession } from "@/hooks/useAdminSession";
 
 export function Footer() {
+  const router = useRouter()
   const [loginOpen, setLoginOpen] = useState(false)
+  const { authenticated } = useAdminSession()
 
   return (
     <footer className="border-t border-slate-200 bg-white px-5 py-9 dark:border-slate-700/50 dark:bg-[#030b16]">
@@ -38,12 +42,12 @@ export function Footer() {
           </a>
           <button
             type="button"
-            onClick={() => setLoginOpen(true)}
-            aria-label="Admin login"
-            title="Admin login"
+            onClick={() => (authenticated ? router.push('/admin/dashboard') : setLoginOpen(true))}
+            aria-label={authenticated ? 'Go to dashboard' : 'Admin login'}
+            title={authenticated ? 'Go to dashboard' : 'Admin login'}
             className="grid size-10 place-items-center rounded-full border border-slate-200 text-slate-400 transition hover:border-[var(--accent)] hover:bg-[var(--accent)] hover:text-white dark:border-slate-700 dark:text-slate-500"
           >
-            <Icon name="lock" className="size-4" />
+            <Icon name="user" className="size-4" />
           </button>
         </div>
         <p className="w-full border-t border-slate-200 pt-5 text-center text-sm text-slate-500 dark:border-slate-700 dark:text-slate-400">
