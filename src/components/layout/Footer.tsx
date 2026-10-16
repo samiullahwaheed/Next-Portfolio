@@ -10,12 +10,9 @@ export function Footer() {
   const { authenticated } = useAdminSession()
 
   return (
-    <footer className="relative isolate overflow-hidden border-t border-slate-200/70 bg-white/60 px-5 pt-12 pb-8 backdrop-blur dark:border-slate-700/40 dark:bg-[#030b16]/60">
+    <footer className="relative isolate overflow-hidden border-t border-slate-200/70 bg-white/60 px-5 py-9 backdrop-blur dark:border-slate-700/40 dark:bg-[#030b16]/60">
       <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent opacity-60" />
-      <p aria-hidden className="pointer-events-none mx-auto -mb-2 max-w-[1180px] select-none text-center font-serif text-[clamp(3rem,13vw,10rem)] font-bold leading-none tracking-tight text-transparent [-webkit-text-stroke:1px_color-mix(in_srgb,var(--accent)_28%,transparent)] bg-gradient-to-b from-[color-mix(in_srgb,var(--accent)_14%,transparent)] to-transparent bg-clip-text">
-        Samiullah
-      </p>
-      <div className="mx-auto mt-8 flex max-w-[1180px] flex-wrap items-center justify-between gap-5 max-sm:justify-center max-sm:text-center">
+      <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-5 max-sm:justify-center max-sm:text-center">
         <div>
           <a
             href="#home"

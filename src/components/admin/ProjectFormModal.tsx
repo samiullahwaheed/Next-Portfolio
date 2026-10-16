@@ -123,53 +123,53 @@ export function ProjectFormModal({ project, onClose, onSaved }: ProjectFormModal
   }
 
   return (
-    <div className="fixed inset-0 z-[100] grid place-items-center overflow-y-auto bg-black/70 p-5" role="dialog" aria-modal="true" aria-label={project ? 'Edit Project' : 'Add New Project'}>
+    <div className="fixed inset-0 z-[100] grid place-items-center overflow-y-auto bg-slate-950/60 p-5 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label={project ? 'Edit Project' : 'Add New Project'}>
       <form
         onSubmit={handleSubmit}
-        className="my-8 w-full max-w-2xl rounded-xl border border-slate-200 bg-white p-6 shadow-2xl dark:border-slate-700 dark:bg-slate-800"
+        className="my-8 w-full max-w-2xl rounded-3xl p-7 max-sm:p-5 border border-slate-200/80 bg-white/95 shadow-2xl backdrop-blur-xl dark:border-slate-700/60 dark:bg-[#071426]/95"
       >
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-900 dark:text-white">{project ? 'Edit Project' : 'Add New Project'}</h2>
-          <button type="button" onClick={onClose} aria-label="Close" className="grid size-8 place-items-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-rose-600 dark:hover:bg-slate-700">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white">{project ? 'Edit Project' : 'Add New Project'}</h2>
+          <button type="button" onClick={onClose} aria-label="Close" className="grid size-8 place-items-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-700 dark:hover:text-white">
             <Icon name="close" className="size-4" />
           </button>
         </div>
 
-        {error && <p className="mb-4 rounded-lg bg-rose-600/10 px-3 py-2 text-sm text-rose-600">{error}</p>}
+        {error && <p className="mb-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2.5 text-sm text-red-600 dark:text-red-400">{error}</p>}
 
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block text-sm sm:col-span-2">
             <span className="mb-1 block text-slate-600 dark:text-slate-300">Title</span>
-            <input value={title} onChange={(event) => setTitle(event.target.value)} className="w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-slate-800 outline-none focus:border-rose-500 dark:border-slate-600 dark:text-slate-100" />
+            <input value={title} onChange={(event) => setTitle(event.target.value)} className="glass-input w-full rounded-xl px-4 py-2.5 text-slate-800 dark:text-slate-100" />
           </label>
 
           <label className="block text-sm sm:col-span-2">
             <span className="mb-1 block text-slate-600 dark:text-slate-300">Description</span>
-            <textarea value={description} onChange={(event) => setDescription(event.target.value)} rows={3} className="w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-slate-800 outline-none focus:border-rose-500 dark:border-slate-600 dark:text-slate-100" />
+            <textarea value={description} onChange={(event) => setDescription(event.target.value)} rows={3} className="glass-input w-full rounded-xl px-4 py-2.5 text-slate-800 dark:text-slate-100" />
           </label>
 
           <label className="block text-sm">
             <span className="mb-1 block text-slate-600 dark:text-slate-300">Live Link</span>
-            <input value={liveLink} onChange={(event) => setLiveLink(event.target.value)} placeholder="https://…" className="w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-slate-800 outline-none focus:border-rose-500 dark:border-slate-600 dark:text-slate-100" />
+            <input value={liveLink} onChange={(event) => setLiveLink(event.target.value)} placeholder="https://…" className="glass-input w-full rounded-xl px-4 py-2.5 text-slate-800 dark:text-slate-100" />
           </label>
 
           <label className="block text-sm">
             <span className="mb-1 block text-slate-600 dark:text-slate-300">GitHub Link</span>
-            <input value={githubLink} onChange={(event) => setGithubLink(event.target.value)} placeholder="https://…" className="w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-slate-800 outline-none focus:border-rose-500 dark:border-slate-600 dark:text-slate-100" />
+            <input value={githubLink} onChange={(event) => setGithubLink(event.target.value)} placeholder="https://…" className="glass-input w-full rounded-xl px-4 py-2.5 text-slate-800 dark:text-slate-100" />
           </label>
 
           <label className="block text-sm">
             <span className="mb-1 block text-slate-600 dark:text-slate-300">Tech Stack (comma separated)</span>
-            <input value={techStack} onChange={(event) => setTechStack(event.target.value)} placeholder="React.js, Node.js, MongoDB" className="w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-slate-800 outline-none focus:border-rose-500 dark:border-slate-600 dark:text-slate-100" />
+            <input value={techStack} onChange={(event) => setTechStack(event.target.value)} placeholder="React.js, Node.js, MongoDB" className="glass-input w-full rounded-xl px-4 py-2.5 text-slate-800 dark:text-slate-100" />
           </label>
 
           <label className="block text-sm">
             <span className="mb-1 block text-slate-600 dark:text-slate-300">Order</span>
-            <input type="number" value={order} onChange={(event) => setOrder(Number(event.target.value))} className="w-full rounded-lg border border-slate-300 bg-transparent px-3 py-2 text-slate-800 outline-none focus:border-rose-500 dark:border-slate-600 dark:text-slate-100" />
+            <input type="number" value={order} onChange={(event) => setOrder(Number(event.target.value))} className="glass-input w-full rounded-xl px-4 py-2.5 text-slate-800 dark:text-slate-100" />
           </label>
 
           <label className="flex items-center gap-2 text-sm sm:col-span-2">
-            <input type="checkbox" checked={featured} onChange={(event) => setFeatured(event.target.checked)} />
+            <input type="checkbox" className="size-4 accent-[var(--accent)]" checked={featured} onChange={(event) => setFeatured(event.target.checked)} />
             <span className="text-slate-600 dark:text-slate-300">Featured</span>
           </label>
 
@@ -183,8 +183,8 @@ export function ProjectFormModal({ project, onClose, onSaved }: ProjectFormModal
                   onClick={() => toggleCategory(item)}
                   className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
                     category.includes(item)
-                      ? 'border-rose-600 bg-rose-600 text-white'
-                      : 'border-slate-300 text-slate-600 dark:border-slate-600 dark:text-slate-300'
+                      ? 'border-[var(--accent)] bg-[var(--accent)] text-white shadow-md shadow-[color-mix(in_srgb,var(--accent)_30%,transparent)]'
+                      : 'border-slate-300 text-slate-600 hover:border-[var(--accent)] hover:text-[var(--accent)] dark:border-slate-600 dark:text-slate-300'
                   }`}
                 >
                   {item}
@@ -198,7 +198,7 @@ export function ProjectFormModal({ project, onClose, onSaved }: ProjectFormModal
             {images.length > 0 && (
               <div className="mb-3 flex flex-wrap gap-3">
                 {images.map((image) => (
-                  <div key={image.publicId} className="relative size-20 overflow-hidden rounded-lg border border-slate-200 dark:border-slate-600">
+                  <div key={image.publicId} className="relative size-20 overflow-hidden rounded-xl border border-slate-200 dark:border-slate-600">
                     <img src={image.url} alt="" className="size-full object-cover" />
                     <button
                       type="button"
@@ -225,7 +225,7 @@ export function ProjectFormModal({ project, onClose, onSaved }: ProjectFormModal
               type="button"
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
-              className="flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:border-rose-500 hover:text-rose-600 disabled:opacity-60 dark:border-slate-600 dark:text-slate-300"
+              className="flex items-center gap-2 rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:opacity-60 dark:border-slate-600 dark:text-slate-300"
             >
               <Icon name="image" className="size-4" />
               {uploading ? 'Uploading…' : 'Choose Images'}
@@ -234,10 +234,10 @@ export function ProjectFormModal({ project, onClose, onSaved }: ProjectFormModal
         </div>
 
         <div className="mt-6 flex justify-end gap-3">
-          <button type="button" onClick={onClose} className="rounded-full border border-slate-300 px-5 py-2.5 font-semibold text-slate-600 dark:border-slate-600 dark:text-slate-300">
+          <button type="button" onClick={onClose} className="rounded-full border border-slate-300 px-5 py-2.5 font-semibold text-slate-600 transition hover:bg-slate-100 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800">
             Cancel
           </button>
-          <button type="submit" disabled={saving || uploading} className="rounded-full bg-rose-600 px-5 py-2.5 font-semibold text-white transition hover:opacity-90 disabled:opacity-60">
+          <button type="submit" disabled={saving || uploading} className="rounded-full bg-[var(--accent)] px-5 py-2.5 font-semibold text-white shadow-lg shadow-[color-mix(in_srgb,var(--accent)_30%,transparent)] transition hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0">
             {saving ? 'Saving…' : 'Save Project'}
           </button>
         </div>

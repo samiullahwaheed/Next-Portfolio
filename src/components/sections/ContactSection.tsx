@@ -8,7 +8,6 @@ const inputClass = 'glass-input h-13 rounded-full px-6 text-slate-800 dark:text-
 
 const contactItems = [
   { icon: 'phone' as IconName, title: 'Call Me', content: '+92 3239865230', href: 'tel:+923239865230' },
-  { icon: 'location' as IconName, title: 'Office', content: 'Islamabad' },
   { icon: 'email' as IconName, title: 'Email', content: 'samiullahwaheed@gmail.com', href: 'mailto:samiullahwaheed@gmail.com' },
   { icon: 'linkedin' as IconName, title: 'LinkedIn', content: 'in/samiullah-waheed', href: 'https://www.linkedin.com/in/samiullah-waheed/' },
   { icon: 'github' as IconName, title: 'GitHub', content: 'SamiullahWaheed', href: 'https://github.com/SamiullahWaheed' },
