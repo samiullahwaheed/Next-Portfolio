@@ -1,5 +1,6 @@
 import { Schema, model, models, type InferSchemaType, type Model } from 'mongoose'
 import { PROJECT_CATEGORIES } from '@/types/project'
+import { slugify } from '@/lib/slug'
 
 const ProjectImageSchema = new Schema(
   {
@@ -12,6 +13,7 @@ const ProjectImageSchema = new Schema(
 const ProjectSchema = new Schema(
   {
     title: { type: String, required: true, trim: true },
+    slug: { type: String, unique: true, sparse: true, trim: true },
     description: { type: String, required: true },
     images: {
       type: [ProjectImageSchema],
@@ -37,6 +39,18 @@ const ProjectSchema = new Schema(
   },
   { timestamps: true },
 )
+
+// Assign a URL slug once (from the title) and keep it stable so shared links don't break on rename
+ProjectSchema.pre('validate', async function () {
+  if (this.slug) return
+  const ProjectModel = this.constructor as Model<ProjectDocument>
+  const base = slugify(this.title)
+  let candidate = base
+  for (let suffix = 2; await ProjectModel.exists({ slug: candidate, _id: { $ne: this._id } }); suffix += 1) {
+    candidate = `${base}-${suffix}`
+  }
+  this.slug = candidate
+})
 
 export type ProjectDocument = InferSchemaType<typeof ProjectSchema>
 

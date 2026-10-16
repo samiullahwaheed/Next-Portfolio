@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Footer } from './components/layout/Footer'
-import { GalleryModal } from './components/layout/GalleryModal'
 import { Navbar } from './components/layout/Navbar'
 import { ScrollToTop } from './components/layout/ScrollToTop'
 import { AboutSection } from './components/sections/AboutSection'
@@ -9,25 +8,16 @@ import { HomeSection } from './components/sections/HomeSection'
 import { PortfolioSection } from './components/sections/PortfolioSection'
 import { ServicesSection } from './components/sections/ServicesSection'
 import { navItems, roles } from './data/portfolio'
-import type { GalleryState } from './types/portfolio'
+import { resolveAccent } from './lib/theme'
 
 function App() {
   const [dark, setDark] = useState(() => localStorage.getItem('portfolio-theme') !== 'light')
   const [menuOpen, setMenuOpen] = useState(false)
   const [pickerOpen, setPickerOpen] = useState(false)
   const [showScrollTop, setShowScrollTop] = useState(false)
-  const [accent, setAccent] = useState(() => {
-    const savedAccent = localStorage.getItem('portfolio-accent')
-    return !savedAccent ||
-      savedAccent === '#3b82f6' ||
-      savedAccent === '#161FA7' ||
-      savedAccent === '#003366'
-      ? '#0F6CBD'
-      : savedAccent
-  })
+  const [accent, setAccent] = useState(() => resolveAccent(localStorage.getItem('portfolio-accent')))
   const [activeSection, setActiveSection] = useState('home')
   const [roleIndex, setRoleIndex] = useState(0)
-  const [gallery, setGallery] = useState<GalleryState | null>(null)
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
@@ -115,34 +105,28 @@ function App() {
     }
   }, [])
 
+  // Links like /#contact from other pages land here before the sections exist:
+  // scroll once mounted, and again after async content (projects) settles the layout
   useEffect(() => {
-    if (!gallery) return
-
-    document.body.style.overflow = 'hidden'
-    const handleKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setGallery(null)
-      if (event.key === 'ArrowLeft') {
-        setGallery((current) =>
-          current
-            ? { ...current, index: (current.index - 1 + current.images.length) % current.images.length }
-            : null,
-        )
-      }
-      if (event.key === 'ArrowRight') {
-        setGallery((current) =>
-          current
-            ? { ...current, index: (current.index + 1) % current.images.length }
-            : null,
-        )
-      }
+    const target = window.location.hash && document.querySelector<HTMLElement>(window.location.hash)
+    if (!target) return
+    let userScrolled = false
+    const markScrolled = () => {
+      userScrolled = true
     }
-
-    window.addEventListener('keydown', handleKey)
+    const scrollToTarget = () => {
+      if (!userScrolled) target.scrollIntoView({ behavior: 'instant' as ScrollBehavior })
+    }
+    scrollToTarget()
+    window.addEventListener('wheel', markScrolled, { passive: true, once: true })
+    window.addEventListener('touchmove', markScrolled, { passive: true, once: true })
+    const timer = window.setTimeout(scrollToTarget, 900)
     return () => {
-      document.body.style.overflow = ''
-      window.removeEventListener('keydown', handleKey)
+      window.clearTimeout(timer)
+      window.removeEventListener('wheel', markScrolled)
+      window.removeEventListener('touchmove', markScrolled)
     }
-  }, [gallery])
+  }, [])
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-600 transition-colors duration-300 dark:bg-[#010713] dark:text-slate-300">
@@ -162,13 +146,12 @@ function App() {
         <HomeSection roleIndex={roleIndex} />
         <AboutSection />
         <ServicesSection />
-        <PortfolioSection openGallery={setGallery} />
+        <PortfolioSection />
         <ContactSection />
       </main>
 
       <Footer />
       <ScrollToTop visible={showScrollTop} />
-      {gallery && <GalleryModal gallery={gallery} setGallery={setGallery} />}
     </div>
   )
 }

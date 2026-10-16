@@ -3,6 +3,7 @@ import { connectDB } from '@/lib/mongodb'
 import { Project } from '@/models/Project'
 import { requireAdmin } from '@/lib/auth'
 import { validateProjectPayload } from '@/lib/projectValidation'
+import { ensureSlugs, revalidateProjectPages } from '@/lib/projects'
 
 export async function GET(request: NextRequest) {
   await connectDB()
@@ -19,7 +20,7 @@ export async function GET(request: NextRequest) {
   }
 
   const projects = await Project.find(query).sort({ order: 1, createdAt: -1 })
-  return NextResponse.json(projects)
+  return NextResponse.json(await ensureSlugs(projects))
 }
 
 export async function POST(request: NextRequest) {
@@ -43,5 +44,6 @@ export async function POST(request: NextRequest) {
     order: Number(body.order) || 0,
   })
 
+  revalidateProjectPages()
   return NextResponse.json(project, { status: 201 })
 }

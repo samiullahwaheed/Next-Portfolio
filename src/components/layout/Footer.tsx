@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Icon } from "../ui/Icon";
@@ -15,7 +17,7 @@ export function Footer() {
       <div className="mx-auto flex max-w-[1180px] flex-wrap items-center justify-between gap-5 max-sm:justify-center max-sm:text-center">
         <div>
           <a
-            href="#home"
+            href="/#home"
             className="font-serif text-xl font-bold text-slate-950 dark:text-white"
           >
             Samiullah <span className="text-[var(--accent)]">Waheed .</span>

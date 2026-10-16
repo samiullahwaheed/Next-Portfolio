@@ -213,6 +213,16 @@ export default function AdminDashboardPage() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex justify-end gap-1.5">
+                          <a
+                            href={`/projects/${project.slug}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label={`View ${project.title} page`}
+                            title="View page"
+                            className="grid size-9 place-items-center rounded-full border border-transparent text-slate-500 transition hover:border-[color-mix(in_srgb,var(--accent)_30%,transparent)] hover:bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] hover:text-[var(--accent)] dark:text-slate-400"
+                          >
+                            <Icon name="external" className="size-4" />
+                          </a>
                           <button
                             onClick={() => {
                               setEditing(project)

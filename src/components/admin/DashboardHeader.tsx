@@ -37,13 +37,6 @@ export function DashboardHeader({ dark, onToggleDark, onLogout }: DashboardHeade
         </Link>
 
         <div className="flex items-center gap-2">
-          <Link
-            href="/"
-            className="hidden items-center gap-2 rounded-full border border-slate-200/80 bg-white/70 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:border-[var(--accent)] hover:text-[var(--accent)] dark:border-slate-700/60 dark:bg-slate-800/70 dark:text-slate-300 sm:flex"
-          >
-            <Icon name="external" className="size-4" />
-            View Site
-          </Link>
 
           <button type="button" className={iconButton} onClick={onToggleDark} aria-label={dark ? 'Switch to light theme' : 'Switch to dark theme'}>
             <Icon name={dark ? 'sun' : 'moon'} />
@@ -69,13 +62,6 @@ export function DashboardHeader({ dark, onToggleDark, onLogout }: DashboardHeade
                     Signed in
                   </p>
                 </div>
-                <Link
-                  href="/"
-                  className="flex items-center gap-2 rounded-2xl px-3 py-2.5 text-sm text-slate-600 transition hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700 sm:hidden"
-                >
-                  <Icon name="external" className="size-4" />
-                  View Site
-                </Link>
                 <button
                   type="button"
                   onClick={onLogout}

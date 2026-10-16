@@ -57,6 +57,12 @@
     --grid-line: color-mix(in srgb, var(--accent) 22%, rgb(255 255 255 / 0.04));
   }
 
+  /* White lines for grids drawn on top of an accent-filled surface */
+  .bg-hero-grid.grid-on-accent,
+  .dark .bg-hero-grid.grid-on-accent {
+    --grid-line: rgb(255 255 255 / 0.12);
+  }
+
   /* Accent-tinted dot pattern for alternating sections */
   .bg-dots {
     background-image: radial-gradient(color-mix(in srgb, var(--accent) 18%, transparent) 1px, transparent 1px);

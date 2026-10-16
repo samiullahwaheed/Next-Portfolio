@@ -1,4 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import Link from 'next/link'
+import { useAdminSession } from '@/hooks/useAdminSession'
 import { accentColors, navItems } from '../../data/portfolio'
 import { Icon } from '../ui/Icon'
 
@@ -29,6 +31,7 @@ export function Navbar({
   setPickerOpen,
 }: NavbarProps) {
   const closeMenu = () => setMenuOpen(() => false)
+  const { authenticated } = useAdminSession()
   const [scrolled, setScrolled] = useState(false)
   const [indicator, setIndicator] = useState<{ left: number; width: number } | null>(null)
   const linkRefs = useRef<Record<string, HTMLAnchorElement | null>>({})
@@ -91,6 +94,11 @@ export function Navbar({
         </ul>
 
         <div className="flex items-center gap-2">
+          {authenticated && (
+            <Link href="/admin/dashboard" className={iconButton} aria-label="Go to admin dashboard" title="Admin dashboard">
+              <Icon name="user" className="size-4" />
+            </Link>
+          )}
           <div className="relative">
             <button className={iconButton} onClick={() => setPickerOpen((value) => !value)} aria-label="Choose accent color" aria-expanded={pickerOpen}>
               <Icon name="paletteControl" />

@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { createPortal } from 'react-dom'
 import { useRouter } from 'next/navigation'
 import { Icon } from '../ui/Icon'
 
@@ -32,7 +33,8 @@ export function AdminLoginModal({ onClose }: { onClose: () => void }) {
     }
   }
 
-  return (
+  // Portaled: the footer's backdrop-filter would otherwise become the containing block for `fixed`
+  return createPortal(
     <div className="fixed inset-0 z-[100] grid place-items-center bg-slate-950/60 p-5 backdrop-blur-sm" role="dialog" aria-modal="true" aria-label="Admin login" onClick={onClose}>
       <form onClick={(event) => event.stopPropagation()} onSubmit={handleSubmit} className="w-full max-w-sm rounded-3xl p-7 border border-slate-200/80 bg-white/95 shadow-2xl backdrop-blur-xl dark:border-slate-700/60 dark:bg-[#071426]/95">
         <div className="mb-5 flex items-center justify-between">
@@ -71,6 +73,7 @@ export function AdminLoginModal({ onClose }: { onClose: () => void }) {
           {loading ? 'Signing in…' : 'Sign In'}
         </button>
       </form>
-    </div>
+    </div>,
+    document.body,
   )
 }

@@ -26,6 +26,7 @@ export type ProjectImage = {
 
 export type ProjectDoc = {
   _id: string
+  slug: string
   title: string
   description: string
   images: ProjectImage[]

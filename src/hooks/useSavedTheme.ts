@@ -1,10 +1,9 @@
 'use client'
 
 import { useEffect, useSyncExternalStore } from 'react'
+import { ACCENT_KEY, THEME_KEY, resolveAccent } from '@/lib/theme'
 
-// Shares the theme/accent the visitor picked on the homepage (same localStorage keys as App.tsx)
-const THEME_KEY = 'portfolio-theme'
-const ACCENT_KEY = 'portfolio-accent'
+// Applies the theme/accent the visitor picked on the homepage
 
 function subscribe(onChange: () => void) {
   const observer = new MutationObserver(onChange)
@@ -18,8 +17,7 @@ export function useSavedTheme() {
   useEffect(() => {
     const root = document.documentElement
     root.classList.toggle('dark', localStorage.getItem(THEME_KEY) !== 'light')
-    const accent = localStorage.getItem(ACCENT_KEY)
-    if (accent) root.style.setProperty('--accent', accent)
+    root.style.setProperty('--accent', resolveAccent(localStorage.getItem(ACCENT_KEY)))
   }, [])
 
   const dark = useSyncExternalStore(subscribe, isDark, () => false)

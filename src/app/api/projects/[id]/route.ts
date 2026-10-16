@@ -4,6 +4,7 @@ import { Project } from '@/models/Project'
 import { requireAdmin } from '@/lib/auth'
 import { validateProjectPayload } from '@/lib/projectValidation'
 import cloudinary from '@/lib/cloudinary'
+import { revalidateProjectPages } from '@/lib/projects'
 
 type RouteParams = { params: Promise<{ id: string }> }
 
@@ -52,6 +53,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
   await existing.save()
 
   if (removedPublicIds.length > 0) await deleteCloudinaryAssets(removedPublicIds)
+  revalidateProjectPages()
 
   return NextResponse.json(existing)
 }
@@ -67,6 +69,7 @@ export async function DELETE(_request: NextRequest, { params }: RouteParams) {
   if (!project) return NextResponse.json({ error: 'Project not found' }, { status: 404 })
 
   await deleteCloudinaryAssets(project.images.map((image: { publicId: string }) => image.publicId))
+  revalidateProjectPages()
 
   return NextResponse.json({ success: true })
 }

@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
-import type { GalleryState } from '../../types/portfolio'
+import Link from 'next/link'
 import { PROJECT_CATEGORIES, type ProjectDoc } from '../../types/project'
 import { Icon } from '../ui/Icon'
 import { SectionTitle } from '../ui/SectionTitle'
@@ -7,7 +7,9 @@ import { trackSpotlight } from '../ui/spotlight'
 
 const FILTERS = ['All', ...PROJECT_CATEGORIES] as const
 
-export function PortfolioSection({ openGallery }: { openGallery: (gallery: GalleryState) => void }) {
+const MAX_TECH = 4
+
+export function PortfolioSection() {
   const [projects, setProjects] = useState<ProjectDoc[]>([])
   const [loading, setLoading] = useState(true)
   const [activeFilter, setActiveFilter] = useState<(typeof FILTERS)[number]>('All')
@@ -121,43 +123,41 @@ export function PortfolioSection({ openGallery }: { openGallery: (gallery: Galle
         {!loading && filteredProjects.length > 0 && (
           <div className="grid grid-cols-2 gap-7 max-[700px]:grid-cols-1">
             {filteredProjects.map((project) => {
-              const images = project.images.map((image) => image.url)
+              const visibleTech = project.techStack.slice(0, MAX_TECH)
+              const hiddenTech = project.techStack.length - visibleTech.length
               return (
-                <article onMouseMove={trackSpotlight} className="reveal-item glass-card group flex overflow-hidden rounded-2xl" key={project._id}>
-                  <div className="flex w-full flex-col">
-                    <button className="relative h-60 overflow-hidden bg-slate-100 text-left dark:bg-slate-900" onClick={() => openGallery({ title: project.title, images, index: 0 })} aria-label={`Open ${project.title} image gallery`}>
-                      <img src={images[0]} alt={`${project.title} project`} className="size-full object-cover transition duration-700 group-hover:scale-110" />
-                      <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
-                      <span className="absolute bottom-4 left-4 inline-flex translate-y-3 items-center gap-2 font-semibold text-white opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-                        View project <span aria-hidden>→</span>
+                <Link
+                  href={`/projects/${project.slug}`}
+                  onMouseMove={trackSpotlight}
+                  className="reveal-item glass-card group flex flex-col overflow-hidden rounded-2xl"
+                  key={project._id}
+                >
+                  <div className="relative aspect-[16/10] overflow-hidden bg-slate-100 dark:bg-slate-900">
+                    <img src={project.images[0]?.url} alt={`${project.title} project`} className="size-full object-cover transition duration-700 group-hover:scale-110" />
+                    <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
+                    <span aria-hidden className="absolute bottom-4 left-4 inline-flex translate-y-3 items-center gap-2 font-semibold text-white opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                      View project <span>→</span>
+                    </span>
+                  </div>
+                  <div className="flex flex-1 flex-col gap-4 p-6">
+                    <h3 className="flex items-start justify-between gap-3 text-xl font-bold text-slate-900 dark:text-white">
+                      {project.title}
+                      <span aria-hidden className="grid size-9 shrink-0 place-items-center rounded-full border border-slate-200 text-slate-400 transition duration-300 group-hover:-rotate-45 group-hover:border-[var(--accent)] group-hover:bg-[var(--accent)] group-hover:text-white dark:border-slate-700">
+                        <Icon name="right" className="size-4" />
                       </span>
-                      <span className="absolute right-3 top-3 rounded-full bg-slate-950/60 px-3 py-1 text-xs font-semibold text-white backdrop-blur">{images.length} images</span>
-                    </button>
-                    <div className="flex flex-1 flex-col p-6">
-                      <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{project.title}</h3>
-                      <p className="mt-3 flex-1 leading-7">{project.description}</p>
-                      <div className="my-5 flex flex-wrap gap-2">
-                        {project.techStack.map((tech) => (
+                    </h3>
+                    {project.techStack.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {visibleTech.map((tech) => (
                           <span className="rounded-full border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] px-3 py-1 text-xs font-medium text-[var(--accent)] dark:text-slate-200" key={tech}>{tech}</span>
                         ))}
-                      </div>
-                      <div className="flex flex-wrap gap-3">
-                        {project.liveLink && (
-                          <a href={project.liveLink} target="_blank" rel="noreferrer" className="inline-flex w-fit items-center gap-2 rounded-full border border-rose-600 px-5 py-2.5 font-semibold text-rose-600 transition hover:bg-rose-600 hover:text-white">
-                            Visit Site
-                            <Icon name="external" className="size-4" />
-                          </a>
-                        )}
-                        {project.githubLink && (
-                          <a href={project.githubLink} target="_blank" rel="noreferrer" className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-300 px-5 py-2.5 font-semibold text-slate-600 transition hover:border-rose-600 hover:text-rose-600 dark:border-slate-600 dark:text-slate-300">
-                            <Icon name="github" className="size-4" />
-                            Code
-                          </a>
+                        {hiddenTech > 0 && (
+                          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-500 dark:bg-slate-800 dark:text-slate-400">+{hiddenTech}</span>
                         )}
                       </div>
-                    </div>
+                    )}
                   </div>
-                </article>
+                </Link>
               )
             })}
           </div>
