@@ -30,9 +30,9 @@ export function ProjectGallery({ title, images }: { title: string; images: strin
         type="button"
         onClick={() => setGallery({ title, images, index: 0 })}
         aria-label={`Open ${title} image gallery (${images.length} images)`}
-        className="group relative block w-full overflow-hidden"
+        className="group relative block w-full overflow-hidden bg-slate-100 dark:bg-slate-900"
       >
-        <img src={images[0]} alt={`${title} preview`} className="aspect-[16/10] w-full object-cover object-top transition duration-700 group-hover:scale-[1.03]" />
+        <img src={images[0]} alt={`${title} preview`} className="mx-auto block h-auto max-h-[75vh] w-full object-contain transition duration-500 group-hover:brightness-90" />
         <span aria-hidden className="absolute inset-0 grid place-items-center bg-slate-950/0 transition duration-300 group-hover:bg-slate-950/45">
           <span className="inline-flex translate-y-2 items-center gap-2 rounded-full bg-white/95 px-5 py-2.5 text-sm font-semibold text-slate-900 opacity-0 shadow-lg transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
             <Icon name="image" className="size-4" />

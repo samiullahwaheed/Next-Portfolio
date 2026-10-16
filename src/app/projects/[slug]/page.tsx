@@ -115,11 +115,6 @@ export default async function ProjectPage({ params }: Props) {
         {/* Split hero: story on the left, browser-framed cover on the right */}
         <section className="mx-auto grid max-w-[1180px] grid-cols-[1fr_1.15fr] items-center gap-14 px-8 pt-36 pb-20 max-[960px]:grid-cols-1 max-[960px]:gap-12 max-sm:px-5 max-sm:pt-32">
           <div>
-            <Link href="/#portfolio" className={`${enter[0]} inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/70 px-4 py-1.5 text-sm font-medium text-slate-600 backdrop-blur transition hover:border-[var(--accent)] hover:text-[var(--accent)] dark:border-slate-700/60 dark:bg-slate-900/50 dark:text-slate-300`}>
-              <Icon name="left" className="size-3.5" />
-              All projects
-            </Link>
-
             <div className={`${enter[80]} mt-6 flex flex-wrap items-center gap-2`}>
               {project.category.map((item) => (
                 <span key={item} className="rounded-full border border-[color-mix(in_srgb,var(--accent)_25%,transparent)] bg-[color-mix(in_srgb,var(--accent)_8%,transparent)] px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[var(--accent)]">
@@ -204,7 +199,7 @@ export default async function ProjectPage({ params }: Props) {
         )}
 
         {/* Overview */}
-        <section className="mx-auto max-w-3xl px-8 pt-24 max-sm:px-5">
+        <section className="mx-auto max-w-[1024px] px-8 pt-24 max-sm:px-5">
           <SectionLabel number="01" title="Overview" />
           {lead && <p className="mt-6 text-[1.15rem] leading-8 text-slate-700 dark:text-slate-300">{lead}</p>}
           {rest.length > 0 && (
