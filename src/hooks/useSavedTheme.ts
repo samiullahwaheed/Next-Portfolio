@@ -7,11 +7,12 @@ import { ACCENT_KEY, THEME_KEY, resolveAccent } from '@/lib/theme'
 
 function subscribe(onChange: () => void) {
   const observer = new MutationObserver(onChange)
-  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'style'] })
   return () => observer.disconnect()
 }
 
 const isDark = () => document.documentElement.classList.contains('dark')
+const currentAccent = () => document.documentElement.style.getPropertyValue('--accent').trim()
 
 export function useSavedTheme() {
   useEffect(() => {
@@ -21,6 +22,7 @@ export function useSavedTheme() {
   }, [])
 
   const dark = useSyncExternalStore(subscribe, isDark, () => false)
+  const accent = useSyncExternalStore(subscribe, currentAccent, () => '')
 
   const toggleDark = () => {
     const next = !isDark()
@@ -28,5 +30,10 @@ export function useSavedTheme() {
     localStorage.setItem(THEME_KEY, next ? 'dark' : 'light')
   }
 
-  return { dark, toggleDark }
+  const setAccent = (value: string) => {
+    document.documentElement.style.setProperty('--accent', value)
+    localStorage.setItem(ACCENT_KEY, value)
+  }
+
+  return { dark, toggleDark, accent, setAccent }
 }

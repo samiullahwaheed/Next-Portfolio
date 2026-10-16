@@ -3,19 +3,33 @@ import { connectDB } from '@/lib/mongodb'
 import { Project } from '@/models/Project'
 import { requireAdmin } from '@/lib/auth'
 import { validateProjectPayload } from '@/lib/projectValidation'
-import { ensureSlugs, revalidateProjectPages } from '@/lib/projects'
+import { ensureSlugs, escapeRegex, getProjectStats, queryProjects, revalidateProjectPages } from '@/lib/projects'
 
 export async function GET(request: NextRequest) {
-  await connectDB()
-
   const { searchParams } = new URL(request.url)
-  const category = searchParams.get('category')
-  const search = searchParams.get('search')
+  const category = searchParams.get('category') ?? undefined
+  const search = searchParams.get('search') ?? undefined
 
+  // Paginated mode (homepage + /projects): ?limit=12&skip=0 → { projects, total }
+  const limitParam = searchParams.get('limit')
+  if (limitParam) {
+    const limit = Math.min(Math.max(Number(limitParam) || 12, 1), 48)
+    const skip = Math.max(Number(searchParams.get('skip')) || 0, 0)
+    const featuredFirst = searchParams.get('featuredFirst') === '1'
+    const [page, stats] = await Promise.all([
+      queryProjects({ category, search, skip, limit, featuredFirst }),
+      // Admin dashboard: overall counts for its stat cards
+      searchParams.get('withStats') === '1' ? getProjectStats() : undefined,
+    ])
+    return NextResponse.json(stats ? { ...page, stats } : page)
+  }
+
+  // Full list (admin dashboard)
+  await connectDB()
   const query: Record<string, unknown> = {}
   if (category && category !== 'All') query.category = category
   if (search) {
-    const regex = new RegExp(search, 'i')
+    const regex = new RegExp(escapeRegex(search), 'i')
     query.$or = [{ title: regex }, { techStack: regex }]
   }
 

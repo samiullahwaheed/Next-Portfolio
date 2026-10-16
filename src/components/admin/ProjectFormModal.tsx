@@ -1,5 +1,5 @@
 import { useRef, useState, type ChangeEvent, type FormEvent } from 'react'
-import { PROJECT_CATEGORIES, type ProjectCategory, type ProjectDoc, type ProjectImage } from '@/types/project'
+import { PROJECT_CATEGORIES, SELECTABLE_CATEGORIES, type ProjectCategory, type ProjectDoc, type ProjectImage } from '@/types/project'
 import { Icon } from '../ui/Icon'
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
@@ -176,7 +176,7 @@ export function ProjectFormModal({ project, onClose, onSaved }: ProjectFormModal
           <div className="sm:col-span-2">
             <span className="mb-2 block text-sm text-slate-600 dark:text-slate-300">Categories</span>
             <div className="flex flex-wrap gap-2">
-              {PROJECT_CATEGORIES.map((item) => (
+              {PROJECT_CATEGORIES.filter((item) => SELECTABLE_CATEGORIES.includes(item) || category.includes(item)).map((item) => (
                 <button
                   type="button"
                   key={item}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { DashboardHeader } from '@/components/admin/DashboardHeader'
 import { ProjectFormModal } from '@/components/admin/ProjectFormModal'
@@ -8,39 +8,76 @@ import { CountUp } from '@/components/ui/CountUp'
 import { Icon } from '@/components/ui/Icon'
 import { trackSpotlight } from '@/components/ui/spotlight'
 import { useSavedTheme } from '@/hooks/useSavedTheme'
+import { Pagination } from '@/components/ui/Pagination'
 import type { ProjectDoc } from '@/types/project'
+
+const PAGE_SIZE = 9
 
 const gradientBadge =
   'grid shrink-0 place-items-center bg-gradient-to-br from-[var(--accent)] to-[color-mix(in_srgb,var(--accent)_55%,#38bdf8)] text-white shadow-lg shadow-[color-mix(in_srgb,var(--accent)_30%,transparent)]'
 
 export default function AdminDashboardPage() {
   const router = useRouter()
-  const { dark, toggleDark } = useSavedTheme()
+  const { dark, toggleDark, accent, setAccent } = useSavedTheme()
   const [projects, setProjects] = useState<ProjectDoc[]>([])
-  const [loading, setLoading] = useState(true)
+  const [stats, setStats] = useState({ total: 0, featured: 0, categories: 0 })
+  const [page, setPage] = useState(1)
+  const [searchInput, setSearchInput] = useState('')
+  // Debounced copy of searchInput that actually drives the fetch
+  const [search, setSearch] = useState('')
+  const [matchTotal, setMatchTotal] = useState(0)
+  const searchTimer = useRef<number | undefined>(undefined)
   const [refreshIndex, setRefreshIndex] = useState(0)
+  // Which page+search+refresh the table currently shows; anything else means a fetch is in flight
+  const [loadedKey, setLoadedKey] = useState<string | null>(null)
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState<ProjectDoc | null>(null)
   const [deleteTarget, setDeleteTarget] = useState<ProjectDoc | null>(null)
   const [deleting, setDeleting] = useState(false)
   const [toast, setToast] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
 
+  const requestKey = `${page}|${search}|${refreshIndex}`
+  const loading = loadedKey !== requestKey
+  const totalPages = Math.max(Math.ceil(matchTotal / PAGE_SIZE), 1)
   const loadProjects = () => setRefreshIndex((index) => index + 1)
 
   useEffect(() => {
     let cancelled = false
-    fetch('/api/projects')
+    const params = new URLSearchParams({ limit: String(PAGE_SIZE), skip: String((page - 1) * PAGE_SIZE), withStats: '1' })
+    if (search) params.set('search', search)
+    fetch(`/api/projects?${params}`)
       .then((response) => response.json())
-      .then((data) => {
-        if (!cancelled) setProjects(data)
+      .then((data: { projects: ProjectDoc[]; total: number; stats: { total: number; featured: number; categoryCount: number } }) => {
+        if (cancelled) return
+        // Deleting the last project on the last page: step back to the new last page
+        const lastPage = Math.max(Math.ceil(data.total / PAGE_SIZE), 1)
+        if (page > lastPage) {
+          setPage(lastPage)
+          return
+        }
+        setProjects(data.projects)
+        setMatchTotal(data.total)
+        setStats({ total: data.stats.total, featured: data.stats.featured, categories: data.stats.categoryCount })
+        setLoadedKey(requestKey)
       })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
+      .catch(() => {
+        if (!cancelled) setToast({ type: 'error', message: 'Failed to load projects' })
       })
     return () => {
       cancelled = true
     }
-  }, [refreshIndex])
+  }, [page, search, refreshIndex, requestKey])
+
+  useEffect(() => () => window.clearTimeout(searchTimer.current), [])
+
+  const changeSearch = (value: string) => {
+    setSearchInput(value)
+    window.clearTimeout(searchTimer.current)
+    searchTimer.current = window.setTimeout(() => {
+      setSearch(value.trim())
+      setPage(1)
+    }, 300)
+  }
 
   useEffect(() => {
     if (!toast) return
@@ -75,19 +112,13 @@ export default function AdminDashboardPage() {
     setFormOpen(true)
   }
 
-  const stats = useMemo(() => {
-    const featured = projects.filter((project) => project.featured).length
-    const categories = new Set(projects.flatMap((project) => project.category))
-    return { total: projects.length, featured, categories: categories.size }
-  }, [projects])
-
   return (
     <div className="relative isolate min-h-screen bg-slate-50 pt-4 text-slate-700 dark:bg-[#010713] dark:text-slate-200">
       <div aria-hidden className="bg-hero-grid pointer-events-none fixed inset-0 -z-10" />
       <div aria-hidden className="pointer-events-none fixed -right-40 -top-20 -z-10 size-[30rem] rounded-full bg-[color-mix(in_srgb,var(--accent)_14%,transparent)] blur-3xl" />
       <div aria-hidden className="pointer-events-none fixed -bottom-40 -left-40 -z-10 size-[28rem] rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] blur-3xl" />
 
-      <DashboardHeader dark={dark} onToggleDark={toggleDark} onLogout={handleLogout} />
+      <DashboardHeader dark={dark} onToggleDark={toggleDark} accent={accent} onAccentChange={setAccent} onLogout={handleLogout} />
 
       <main className="mx-auto max-w-6xl px-6 pt-12 pb-16 max-sm:px-4">
         <div className="mb-10 flex flex-wrap items-end justify-between gap-5">
@@ -111,19 +142,37 @@ export default function AdminDashboardPage() {
         </div>
 
         <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
-          <StatCard icon="grid" label="Total Projects" value={stats.total} loading={loading} />
-          <StatCard icon="star" label="Featured" value={stats.featured} loading={loading} />
-          <StatCard icon="portfolio" label="Categories Used" value={stats.categories} loading={loading} />
+          <StatCard icon="grid" label="Total Projects" value={stats.total} loading={!loadedKey} />
+          <StatCard icon="star" label="Featured" value={stats.featured} loading={!loadedKey} />
+          <StatCard icon="portfolio" label="Categories Used" value={stats.categories} loading={!loadedKey} />
         </div>
 
         <div className="glass-card no-lift overflow-hidden rounded-3xl">
-          <div className="flex items-center justify-between gap-3 border-b border-slate-200/70 px-6 py-4 dark:border-slate-700/50">
-            <h2 className="font-bold text-slate-900 dark:text-white">All projects</h2>
-            {!loading && (
-              <span className="rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] px-3 py-1 text-xs font-semibold text-[var(--accent)]">
-                {projects.length} total
-              </span>
-            )}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200/70 px-6 py-4 dark:border-slate-700/50">
+            <div className="flex items-center gap-3">
+              <h2 className="font-bold text-slate-900 dark:text-white">All projects</h2>
+              {loadedKey && (
+                <span className="rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] px-3 py-1 text-xs font-semibold text-[var(--accent)]">
+                  {search ? `${matchTotal} found` : `${stats.total} total`}
+                  {totalPages > 1 && ` · page ${page} of ${totalPages}`}
+                </span>
+              )}
+            </div>
+            <label className="glass-input flex w-full max-w-xs items-center gap-2 rounded-full px-4 py-2 max-sm:max-w-none focus-within:border-[var(--accent)] focus-within:shadow-[0_0_0_4px_color-mix(in_srgb,var(--accent)_14%,transparent)]">
+              <Icon name="search" className="size-4 shrink-0 text-slate-400" />
+              <input
+                value={searchInput}
+                onChange={(event) => changeSearch(event.target.value)}
+                placeholder="Search title or tech…"
+                aria-label="Search projects"
+                className="w-full bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400 dark:text-slate-200"
+              />
+              {searchInput && (
+                <button type="button" onClick={() => changeSearch('')} aria-label="Clear search" className="grid size-5 shrink-0 place-items-center rounded-full text-slate-400 transition hover:text-slate-700 dark:hover:text-white">
+                  <Icon name="close" className="size-3.5" />
+                </button>
+              )}
+            </label>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm">
@@ -137,7 +186,7 @@ export default function AdminDashboardPage() {
               </thead>
               <tbody>
                 {loading &&
-                  [1, 2, 3].map((key) => (
+                  Array.from({ length: 3 }, (_, key) => (
                     <tr key={key} className="border-t border-slate-200/60 dark:border-slate-700/40">
                       <td className="px-6 py-4" colSpan={4}>
                         <div className="flex items-center gap-3">
@@ -155,10 +204,16 @@ export default function AdminDashboardPage() {
                         <div className={`${gradientBadge} size-14 rounded-2xl`}>
                           <Icon name="portfolio" className="size-6" />
                         </div>
-                        <p className="font-medium text-slate-500 dark:text-slate-400">No projects yet</p>
-                        <button onClick={openNewProject} className="mt-1 text-sm font-semibold text-[var(--accent)] hover:underline">
-                          Add your first project
-                        </button>
+                        <p className="font-medium text-slate-500 dark:text-slate-400">{search ? `No projects match "${search}"` : 'No projects yet'}</p>
+                        {search ? (
+                          <button onClick={() => changeSearch('')} className="mt-1 text-sm font-semibold text-[var(--accent)] hover:underline">
+                            Clear search
+                          </button>
+                        ) : (
+                          <button onClick={openNewProject} className="mt-1 text-sm font-semibold text-[var(--accent)] hover:underline">
+                            Add your first project
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -249,6 +304,11 @@ export default function AdminDashboardPage() {
               </tbody>
             </table>
           </div>
+          {totalPages > 1 && (
+            <div className="border-t border-slate-200/70 px-6 py-4 dark:border-slate-700/50">
+              <Pagination page={page} totalPages={totalPages} onChange={setPage} disabled={loading} />
+            </div>
+          )}
         </div>
       </main>
 

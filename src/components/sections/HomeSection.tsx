@@ -1,7 +1,8 @@
 import { roles } from '../../data/portfolio'
 import { Icon } from '../ui/Icon'
+import { Typewriter } from '../ui/Typewriter'
 
-export function HomeSection({ roleIndex }: { roleIndex: number }) {
+export function HomeSection() {
   return (
     <section id="home" className="relative isolate flex min-h-screen items-center overflow-hidden px-8 pt-36 pb-20 max-sm:px-5 max-sm:pt-32 dark:bg-[#010713]">
       <div aria-hidden className="bg-hero-grid pointer-events-none absolute inset-0 -z-10" />
@@ -14,10 +15,10 @@ export function HomeSection({ roleIndex }: { roleIndex: number }) {
             Samiullah <span className="text-[var(--accent)]">Waheed</span>
           </h1>
           <h2 className="mt-6 text-[clamp(1.5rem,3vw,2.1rem)] font-bold text-slate-900 dark:text-white">
-            I&apos;m a <span className="inline-block min-w-[280px] text-[var(--accent)] transition-opacity">{roles[roleIndex]}</span>
+            I&apos;m a <Typewriter words={roles} className="inline-block min-w-[280px] text-[var(--accent)]" />
           </h2>
           <p className="mt-5 max-w-2xl text-lg leading-8">
-            I&apos;m a MERN Stack Developer experienced in designing and developing responsive websites and web applications.
+            I&apos;m a Full Stack Developer experienced in designing and developing responsive websites and web applications.
           </p>
           <div className="mt-10 flex flex-wrap gap-4">
             <a href="/portfolio/Samiullah-Waheed-Resume.pdf" download className="inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-6 py-3 font-semibold text-white shadow-lg shadow-[color-mix(in_srgb,var(--accent)_20%,transparent)] transition hover:scale-105">

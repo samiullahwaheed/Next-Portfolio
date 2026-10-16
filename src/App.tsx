@@ -7,26 +7,33 @@ import { ContactSection } from './components/sections/ContactSection'
 import { HomeSection } from './components/sections/HomeSection'
 import { PortfolioSection } from './components/sections/PortfolioSection'
 import { ServicesSection } from './components/sections/ServicesSection'
-import { navItems, roles } from './data/portfolio'
-import { resolveAccent } from './lib/theme'
+import { navItems } from './data/portfolio'
+import { ACCENT_KEY, THEME_KEY, resolveAccent } from './lib/theme'
 
 function App() {
-  const [dark, setDark] = useState(() => localStorage.getItem('portfolio-theme') !== 'light')
+  const [dark, setDark] = useState(() => localStorage.getItem(THEME_KEY) !== 'light')
   const [menuOpen, setMenuOpen] = useState(false)
   const [pickerOpen, setPickerOpen] = useState(false)
   const [showScrollTop, setShowScrollTop] = useState(false)
-  const [accent, setAccent] = useState(() => resolveAccent(localStorage.getItem('portfolio-accent')))
+  const [accent, setAccent] = useState(() => resolveAccent(localStorage.getItem(ACCENT_KEY)))
+  // Persist only explicit choices, so visitors who never picked keep following the site defaults
+  const chooseAccent = (value: string) => {
+    setAccent(value)
+    localStorage.setItem(ACCENT_KEY, value)
+  }
+  const chooseDark = (updater: (value: boolean) => boolean) => {
+    const next = updater(dark)
+    setDark(next)
+    localStorage.setItem(THEME_KEY, next ? 'dark' : 'light')
+  }
   const [activeSection, setActiveSection] = useState('home')
-  const [roleIndex, setRoleIndex] = useState(0)
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
-    localStorage.setItem('portfolio-theme', dark ? 'dark' : 'light')
   }, [dark])
 
   useEffect(() => {
     document.documentElement.style.setProperty('--accent', accent)
-    localStorage.setItem('portfolio-accent', accent)
   }, [accent])
 
   useEffect(() => {
@@ -57,14 +64,6 @@ function App() {
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useEffect(() => {
-    const timer = window.setInterval(
-      () => setRoleIndex((index) => (index + 1) % roles.length),
-      2400,
-    )
-    return () => window.clearInterval(timer)
   }, [])
 
   useEffect(() => {
@@ -136,14 +135,14 @@ function App() {
         dark={dark}
         menuOpen={menuOpen}
         pickerOpen={pickerOpen}
-        setAccent={setAccent}
-        setDark={setDark}
+        setAccent={chooseAccent}
+        setDark={chooseDark}
         setMenuOpen={setMenuOpen}
         setPickerOpen={setPickerOpen}
       />
 
       <main>
-        <HomeSection roleIndex={roleIndex} />
+        <HomeSection />
         <AboutSection />
         <ServicesSection />
         <PortfolioSection />

@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound, permanentRedirect } from 'next/navigation'
 import { Footer } from '@/components/layout/Footer'
+import { ProjectCta } from '@/components/project/ProjectCta'
 import { ProjectGallery } from '@/components/project/ProjectGallery'
 import { ProjectNavbar } from '@/components/project/ProjectNavbar'
 import { Icon } from '@/components/ui/Icon'
 import { getProjectBySlug } from '@/lib/projects'
+import { visibleCategories } from '@/types/project'
 
 // Cached per project; admin writes call revalidateProjectPages() to refresh immediately
 export const revalidate = 3600
@@ -82,11 +83,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProjectPage({ params }: Props) {
   const project = await loadProject((await params).slug)
   const [lead, ...rest] = toParagraphs(project.description)
+  const categories = visibleCategories(project.category)
   const images = project.images.map((image) => image.url)
   const address = hostname(project.liveLink) ?? `samiullahwaheed.vercel.app/projects/${project.slug}`
 
   const facts = [
-    { label: 'Category', value: project.category[0] },
+    { label: 'Category', value: categories[0] ?? '—' },
     { label: 'Technologies', value: String(project.techStack.length) },
     { label: 'Screenshots', value: String(images.length) },
   ]
@@ -116,7 +118,7 @@ export default async function ProjectPage({ params }: Props) {
         <section className="mx-auto grid max-w-[1180px] grid-cols-[1fr_1.15fr] items-center gap-14 px-8 pt-36 pb-20 max-[960px]:grid-cols-1 max-[960px]:gap-12 max-sm:px-5 max-sm:pt-32">
           <div>
             <div className={`${enter[80]} mt-6 flex flex-wrap items-center gap-2`}>
-              {project.category.map((item) => (
+              {categories.map((item) => (
                 <span key={item} className="rounded-full border border-[color-mix(in_srgb,var(--accent)_25%,transparent)] bg-[color-mix(in_srgb,var(--accent)_8%,transparent)] px-3 py-1 text-xs font-semibold uppercase tracking-wider text-[var(--accent)]">
                   {item}
                 </span>
@@ -212,21 +214,7 @@ export default async function ProjectPage({ params }: Props) {
         </section>
 
 
-        {/* CTA */}
-        <section className="mx-auto mt-24 mb-24 max-w-[1180px] px-8 max-sm:px-5">
-          <div className="relative isolate overflow-hidden rounded-[2rem] bg-gradient-to-br from-[var(--accent)] to-[color-mix(in_srgb,var(--accent)_55%,#0f172a)] px-10 py-14 text-white shadow-[0_30px_80px_-30px_color-mix(in_srgb,var(--accent)_70%,transparent)] max-sm:px-6">
-            <div aria-hidden className="bg-hero-grid grid-on-accent pointer-events-none absolute inset-0 -z-10" />
-            <div className="flex flex-wrap items-center justify-between gap-8">
-              <div>
-                <h2 className="font-serif text-[clamp(1.8rem,4vw,2.6rem)] font-bold leading-tight">Have a similar project in mind?</h2>
-                <p className="mt-2 max-w-xl text-white/80">Let&apos;s talk about what you&apos;re building and how I can help bring it to life.</p>
-              </div>
-              <Link href="/#contact" className="inline-flex shrink-0 items-center gap-2 rounded-full bg-white px-7 py-3 font-semibold text-slate-900 shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl">
-                Let&apos;s work together <span aria-hidden>→</span>
-              </Link>
-            </div>
-          </div>
-        </section>
+        <ProjectCta />
       </main>
 
       <Footer />

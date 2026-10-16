@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 import '../index.css'
+import { themeInitScript } from '@/lib/theme'
 
 const siteUrl = 'https://samiullahwaheed.vercel.app'
 const siteName = 'Samiullah Waheed'
@@ -127,6 +128,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Applies saved/default theme + accent before first paint (no light-mode flash) */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}

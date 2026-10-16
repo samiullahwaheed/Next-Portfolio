@@ -2,14 +2,23 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useSavedTheme } from '@/hooks/useSavedTheme'
+import { AccentPicker } from '../ui/AccentPicker'
 import { Icon } from '../ui/Icon'
 
 const iconButton =
   'grid size-10 place-items-center rounded-full border border-slate-200/80 bg-white/70 text-[var(--accent)] transition hover:-translate-y-0.5 hover:shadow-md dark:border-slate-700/60 dark:bg-slate-800/70'
 
+const links: { label: string; href: string; mobile?: boolean; match?: (pathname: string) => boolean }[] = [
+  { label: 'Home', href: '/' },
+  { label: 'Projects', href: '/projects', mobile: true, match: (pathname) => pathname.startsWith('/projects') },
+  { label: 'Contact', href: '/#contact' },
+]
+
 export function ProjectNavbar() {
-  const { dark, toggleDark } = useSavedTheme()
+  const { dark, toggleDark, accent, setAccent } = useSavedTheme()
+  const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -30,13 +39,23 @@ export function ProjectNavbar() {
         </Link>
 
         <div className="flex items-center gap-2">
-          <Link
-            href="/#portfolio"
-            className="inline-flex items-center gap-2 rounded-full border border-slate-200/80 bg-white/70 px-4 py-2 text-sm font-semibold text-slate-600 transition hover:border-[var(--accent)] hover:text-[var(--accent)] max-sm:hidden dark:border-slate-700/60 dark:bg-slate-800/70 dark:text-slate-300"
-          >
-            <Icon name="left" className="size-4" />
-            All projects
-          </Link>
+          <ul className="mr-1 flex items-center gap-1 rounded-full bg-slate-100/70 p-1 dark:bg-slate-800/50">
+            {links.map((link) => {
+              const active = link.match?.(pathname) ?? false
+              return (
+                <li key={link.href} className={link.mobile ? '' : 'max-sm:hidden'}>
+                  <Link
+                    href={link.href}
+                    aria-current={active ? 'page' : undefined}
+                    className={`block rounded-full px-4 py-1.5 text-sm font-semibold transition ${active ? 'bg-[var(--accent)] text-white shadow-md' : 'text-slate-600 hover:text-[var(--accent)] dark:text-slate-300'}`}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+          <AccentPicker accent={accent} onChange={setAccent} buttonClassName={iconButton} />
           <button type="button" className={iconButton} onClick={toggleDark} aria-label={dark ? 'Switch to light theme' : 'Switch to dark theme'}>
             <Icon name={dark ? 'sun' : 'moon'} />
           </button>
