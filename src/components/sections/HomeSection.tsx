@@ -3,7 +3,7 @@ import { Icon } from '../ui/Icon'
 
 export function HomeSection({ roleIndex }: { roleIndex: number }) {
   return (
-    <section id="home" className="relative flex min-h-[calc(100vh-74px)] items-center overflow-hidden bg-[radial-gradient(circle_at_78%_25%,color-mix(in_srgb,var(--accent)_18%,transparent),transparent_30%)] px-8 py-20 before:absolute before:-left-40 before:bottom-0 before:size-96 before:rounded-full before:bg-blue-500/10 before:blur-3xl max-sm:px-5 dark:bg-[#010713]">
+    <section id="home" className="relative flex min-h-[calc(100vh-96px)] items-center overflow-hidden bg-[radial-gradient(circle_at_78%_25%,color-mix(in_srgb,var(--accent)_18%,transparent),transparent_30%)] px-8 py-20 before:absolute before:-left-40 before:bottom-0 before:size-96 before:rounded-full before:bg-blue-500/10 before:blur-3xl max-sm:px-5 dark:bg-[#010713]">
       <div className="mx-auto grid w-full max-w-[1100px] grid-cols-[1.25fr_0.75fr] items-center gap-14 max-[740px]:grid-cols-1">
         <div className="reveal-item">
           <p className="mb-3 text-lg font-medium text-slate-500 dark:text-slate-400">Hello, my name is</p>
