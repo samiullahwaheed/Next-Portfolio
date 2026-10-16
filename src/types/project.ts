@@ -3,7 +3,6 @@ export const PROJECT_CATEGORIES = [
   'Mobile App',
   'Full Stack',
   'Frontend',
-  'Backend',
   'React',
   'Node.js',
   'API Integration',
@@ -11,7 +10,6 @@ export const PROJECT_CATEGORIES = [
   'SaaS',
   'AI Agents',
   'Automation',
-  'RAG Apps',
   'Next.js',
   'Flutter',
   'WordPress',
@@ -22,9 +20,6 @@ export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number]
 // Still valid on saved projects (model + validation keep the full list above),
 // but no longer offered as a filter, shown on public pages, or picked in the admin form
 export const RETIRED_CATEGORIES: readonly ProjectCategory[] = ['Node.js']
-
-// Always offered as a filter, even before any project uses it
-export const PINNED_CATEGORIES: readonly ProjectCategory[] = ['WordPress']
 
 export const SELECTABLE_CATEGORIES = PROJECT_CATEGORIES.filter((category) => !RETIRED_CATEGORIES.includes(category))
 

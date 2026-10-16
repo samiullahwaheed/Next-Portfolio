@@ -63,8 +63,17 @@ export function Timeline({ title, subtitle, entries, educationTimeline = false }
                   {entry.date}
                 </span>
               </div>
-              <h5 className="mb-2 font-semibold text-rose-600">{entry.role}</h5>
-              <p className="leading-7 text-slate-600 dark:text-slate-300">{entry.description}</p>
+              <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                <h5 className="font-semibold text-rose-600">{entry.role}</h5>
+                {entry.location && (
+                  <span className="inline-flex items-center gap-1 text-sm italic text-slate-500 dark:text-slate-400">
+                    <Icon name="location" className="size-3.5 not-italic" />
+                    {entry.location}
+                  </span>
+                )}
+              </div>
+              {/* div, not p: descriptions may contain bullet lists */}
+              <div className="leading-7 text-slate-600 dark:text-slate-300">{entry.description}</div>
             </article>
           ))}
         </div>

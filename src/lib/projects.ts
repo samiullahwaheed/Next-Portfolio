@@ -3,14 +3,15 @@ import { cache } from 'react'
 import { isValidObjectId } from 'mongoose'
 import { connectDB } from '@/lib/mongodb'
 import { Project } from '@/models/Project'
-import { PINNED_CATEGORIES, SELECTABLE_CATEGORIES, type ProjectCategory, type ProjectDoc } from '@/types/project'
+import { SELECTABLE_CATEGORIES, type ProjectCategory, type ProjectDoc } from '@/types/project'
 
 type ProjectRecord = InstanceType<typeof Project>
 
 // Projects created before slugs existed get one the first time they're read
 export async function ensureSlugs(projects: ProjectRecord[]) {
   for (const project of projects) {
-    if (!project.slug) await project.save()
+    // validateModifiedOnly: only the new slug is validated, so legacy fields can't block the save
+    if (!project.slug) await project.save({ validateModifiedOnly: true })
   }
   return projects
 }
@@ -58,10 +59,8 @@ export async function getProjectStats() {
     Project.countDocuments({ featured: true }),
     Project.distinct('category') as Promise<string[]>,
   ])
-  // Filters: canonical order, only categories in use (plus pinned ones), never retired ones
-  const categories: ProjectCategory[] = SELECTABLE_CATEGORIES.filter(
-    (category) => used.includes(category) || PINNED_CATEGORIES.includes(category),
-  )
+  // Filters: every selectable category (retired ones excluded), even before it has projects
+  const categories: ProjectCategory[] = [...SELECTABLE_CATEGORIES]
   // How many visible categories actually have projects (for stat tiles)
   const categoryCount = SELECTABLE_CATEGORIES.filter((category) => used.includes(category)).length
   return { total, featured, categories, categoryCount }

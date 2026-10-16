@@ -45,6 +45,7 @@ export type TimelineEntry = {
   organization: string
   date: string
   role: string
+  location?: string
   description: ReactNode
 }
 

@@ -1,3 +1,4 @@
+import { ExternalLink } from '../components/ui/ExternalLink'
 import type { IconName, TimelineEntry } from '../types/portfolio'
 
 export const navItems: Array<{ label: string; href: string; icon: IconName }> = [
@@ -28,63 +29,57 @@ export const expertise = [
 // Add, remove, or reorder objects here to update the experience timeline.
 export const workExperience: TimelineEntry[] = [
   {
-    organization: 'Solexes Pvt Ltd',
+    organization: 'Solexes (Pvt.) Ltd.',
     date: 'Apr 2026 - Present',
     role: 'Full Stack Developer',
+    location: 'NSTP, Islamabad, PK',
     description: (
-      <>
-        Providing full stack Support to multiple projects and contributed to <span className="font-semibold text-rose-600">DocuTect AI</span> App
-        development and delivered full stack business applications. Performed testing on
-        various projects and provided ongoing technical support, including debugging,
-        updates, and system maintenance.
-      </>
+      <ul className="list-disc space-y-1.5 pl-5 marker:text-[var(--accent)]">
+        <li>
+          Contributed to <ExternalLink href="https://www.docutect.com/">DocuTect AI</ExternalLink> and{' '}
+          <ExternalLink href="https://rewaldo.com/">Rewaldo</ExternalLink> App development and
+          delivered full stack business applications. Performed testing on various existing projects and provided
+          ongoing technical support, including debugging, updates, and system maintenance.
+        </li>
+        <li>
+          Working in the Projects support team, focusing on app optimization and managing updates for both Android
+          and iOS platforms.
+        </li>
+      </ul>
     ),
   },
   {
-    organization: 'SiberKoza (NASTP)',
+    organization: 'SiberKoza International',
     date: 'Jun 2025 - Aug 2025',
-    role: 'MERN Stack Developer Intern',
+    role: 'MERN Stack Developer – Internship',
+    location: 'NASTP, Rawalpindi, PK',
     description: (
-      <>
-        Interned as a Full Stack Developer at Mecca Innovations, a startup of SiberKoza
-        International, where I worked on an AI-based startup by providing full MERN stack
-        support. I also contributed to making other applications fully responsive and
-        developed backend APIs to support project functionality.
-      </>
+      <ul className="list-disc space-y-1.5 pl-5 marker:text-[var(--accent)]">
+        <li>
+          Contributed to an AI-based startup by providing full <strong className="font-semibold text-slate-900 dark:text-white">MERN</strong> stack development support.
+        </li>
+        <li>
+          Developed full Frontend in <strong className="font-semibold text-slate-900 dark:text-white">React</strong> and <strong className="font-semibold text-slate-900 dark:text-white">Next.js</strong>, integrated APIs,
+          added attractive animations and also implemented authentication with JWT.
+        </li>
+        <li>
+          Assisted in the development and improvement of other web applications in <strong className="font-semibold text-slate-900 dark:text-white">MERN</strong>.
+        </li>
+      </ul>
     ),
   },
   {
-    organization: 'Brain Wave',
-    date: 'Apr 2025 - May 2025',
-    role: 'Frontend Developer Intern',
-    description: (
-      <>
-        Provided frontend support to the company by developing different projects in
-        React.js. I developed and maintained web applications, designed user-friendly
-        responsive websites, enhanced user experience, and optimized performance.
-      </>
-    ),
-  },
-  {
-    organization: 'Intern Intelligence',
-    date: 'Mar 2025 - Apr 2025',
-    role: 'Web Developer Intern',
-    description: (
-      <>
-        Worked as a Web Developer Intern, where I developed responsive UIs using Tailwind
-        CSS, React, and APIs while working on five real-world projects.
-      </>
-    ),
-  },
-  {
-    organization: 'Minhaj Model School',
-    date: 'Sep 2022 - Apr 2026',
+    organization: 'Minhaj Model School & Islamabad College of Education',
+    date: 'Sep 2022 - Mar 2026',
     role: 'Computer Teacher',
+    location: 'Islamabad, PK',
     description: (
-      <>
-        Worked as a Computer Science and Mathematics Teacher. I taught Matric-level
-        students and provide them practical knowledge of <span className="font-semibold text-rose-600">HTML and C programming</span>.
-      </>
+      <ul className="list-disc space-y-1.5 pl-5 marker:text-[var(--accent)]">
+        <li>
+          Taught Computer Science to Matric-level students and provided practical training in 
+          <strong className="font-semibold text-slate-900 dark:text-white">Web Development</strong> and <strong className="font-semibold text-slate-900 dark:text-white">C programming</strong>.
+        </li>
+      </ul>
     ),
   },
 ]

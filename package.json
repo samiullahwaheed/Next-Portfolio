@@ -8,7 +8,8 @@
     "build": "next build",
     "lint": "eslint .",
     "start": "next start",
-    "seed": "node --env-file=.env.local scripts/seed.mjs"
+    "seed": "node --env-file=.env.local scripts/seed.mjs",
+    "migrate:categories": "node --env-file=.env.local scripts/remove-categories.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

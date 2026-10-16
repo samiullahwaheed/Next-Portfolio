@@ -14,7 +14,10 @@ type ProjectFormModalProps = {
 export function ProjectFormModal({ project, onClose, onSaved }: ProjectFormModalProps) {
   const [title, setTitle] = useState(project?.title ?? '')
   const [description, setDescription] = useState(project?.description ?? '')
-  const [category, setCategory] = useState<ProjectCategory[]>(project?.category ?? [])
+  // Removed categories (e.g. 'Backend') may still be on older projects; drop them so the form validates
+  const [category, setCategory] = useState<ProjectCategory[]>(() =>
+    (project?.category ?? []).filter((item) => (PROJECT_CATEGORIES as readonly string[]).includes(item)),
+  )
   const [techStack, setTechStack] = useState(project?.techStack.join(', ') ?? '')
   const [liveLink, setLiveLink] = useState(project?.liveLink ?? '')
   const [githubLink, setGithubLink] = useState(project?.githubLink ?? '')
