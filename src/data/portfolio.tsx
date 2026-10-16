@@ -138,3 +138,11 @@ export const services = [
 
 // Projects have moved to MongoDB — see src/models/Project.ts and scripts/seed.mjs for the
 // one-time migration of the data that used to live in this file.
+
+// About-section stat tiles. PLACEHOLDERS — replace `value` with your real numbers.
+export const stats = [
+  { value: 3, suffix: '+', label: 'Years of experience' },
+  { value: 15, suffix: '+', label: 'Projects delivered' },
+  { value: 10, suffix: '+', label: 'Happy clients' },
+  { value: 12, suffix: '+', label: 'Technologies' },
+]

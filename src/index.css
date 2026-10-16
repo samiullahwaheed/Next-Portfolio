@@ -57,6 +57,95 @@
     --grid-line: color-mix(in srgb, var(--accent) 22%, rgb(255 255 255 / 0.04));
   }
 
+  /* Accent-tinted dot pattern for alternating sections */
+  .bg-dots {
+    background-image: radial-gradient(color-mix(in srgb, var(--accent) 18%, transparent) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 15%, #000 85%, transparent);
+  }
+
+  .dark .bg-dots {
+    background-image: radial-gradient(color-mix(in srgb, var(--accent) 30%, rgb(255 255 255 / 0.08)) 1px, transparent 1px);
+  }
+
+  .text-accent-gradient {
+    background-image: linear-gradient(100deg, var(--accent), color-mix(in srgb, var(--accent) 55%, #38bdf8));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Frosted card with an accent border + pointer spotlight on hover (see ui/spotlight.ts) */
+  .glass-card {
+    position: relative;
+    isolation: isolate;
+    border: 1px solid rgb(226 232 240 / 0.8);
+    background: rgb(255 255 255 / 0.7);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 30px -12px rgb(15 23 42 / 0.12);
+    transition:
+      translate 300ms ease,
+      border-color 300ms ease,
+      box-shadow 300ms ease;
+  }
+
+  .dark .glass-card {
+    border-color: rgb(51 65 85 / 0.5);
+    background: rgb(7 20 38 / 0.6);
+  }
+
+  .glass-card::before {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    content: "";
+    border-radius: inherit;
+    background: radial-gradient(
+      320px circle at var(--mx, 50%) var(--my, 50%),
+      color-mix(in srgb, var(--accent) 12%, transparent),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 300ms ease;
+    pointer-events: none;
+  }
+
+  .glass-card:hover {
+    translate: 0 -4px;
+    border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+    box-shadow: 0 18px 40px -16px color-mix(in srgb, var(--accent) 40%, transparent);
+  }
+
+  .glass-card:hover::before {
+    opacity: 1;
+  }
+
+  .glass-card.no-lift:hover {
+    translate: none;
+  }
+
+  .glass-input {
+    border: 1px solid rgb(226 232 240);
+    background: rgb(255 255 255 / 0.8);
+    outline: none;
+    transition:
+      border-color 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  .dark .glass-input {
+    border-color: rgb(51 65 85 / 0.7);
+    background: rgb(1 7 19 / 0.5);
+  }
+
+  .glass-input:focus {
+    border-color: var(--accent);
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--accent) 14%, transparent),
+      0 8px 24px -10px color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+
   .text-rose-600,
   .text-rose-500 {
     color: var(--accent) !important;
@@ -126,6 +215,15 @@
   .reveal-item.is-visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  .reveal-item.glass-card {
+    transition:
+      opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+      translate 300ms ease,
+      border-color 300ms ease,
+      box-shadow 300ms ease;
   }
 
   .timeline-line-base,

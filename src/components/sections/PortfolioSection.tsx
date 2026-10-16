@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import type { GalleryState } from '../../types/portfolio'
 import { PROJECT_CATEGORIES, type ProjectDoc } from '../../types/project'
 import { Icon } from '../ui/Icon'
 import { SectionTitle } from '../ui/SectionTitle'
+import { trackSpotlight } from '../ui/spotlight'
 
 const FILTERS = ['All', ...PROJECT_CATEGORIES] as const
 
@@ -12,6 +13,19 @@ export function PortfolioSection({ openGallery }: { openGallery: (gallery: Galle
   const [activeFilter, setActiveFilter] = useState<(typeof FILTERS)[number]>('All')
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [indicator, setIndicator] = useState<CSSProperties | null>(null)
+  const filterRefs = useRef<Record<string, HTMLButtonElement | null>>({})
+
+  // Slide the active pill behind the selected filter (buttons may wrap onto two rows)
+  useLayoutEffect(() => {
+    const measure = () => {
+      const button = filterRefs.current[activeFilter]
+      setIndicator(button ? { left: button.offsetLeft, top: button.offsetTop, width: button.offsetWidth, height: button.offsetHeight } : null)
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [activeFilter])
 
   useEffect(() => {
     let cancelled = false
@@ -45,44 +59,57 @@ export function PortfolioSection({ openGallery }: { openGallery: (gallery: Galle
   }, [projects, activeFilter, debouncedSearch])
 
   return (
-    <section id="portfolio" className="min-h-screen border-y border-slate-200/80 bg-gradient-to-br from-slate-100 via-white to-blue-50 px-8 py-20 dark:border-slate-700/40 dark:from-[#030b16] dark:via-[#04101e] dark:to-[#07182a] max-sm:px-5">
+    <section id="portfolio" className="relative isolate overflow-hidden px-8 py-24 max-sm:px-5">
+      <div aria-hidden className="bg-dots pointer-events-none absolute inset-0 -z-10" />
+      <div aria-hidden className="pointer-events-none absolute -right-48 bottom-20 -z-10 size-[30rem] rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] blur-3xl" />
       <div className="mx-auto max-w-[1100px]">
-        <SectionTitle>Featured Projects</SectionTitle>
-        <p className="-mt-8 mb-10 text-center text-slate-500 dark:text-slate-400">Showcase of my recent work in full-stack web development</p>
+        <SectionTitle eyebrow="Portfolio" title="Featured" highlight="projects" subtitle="Showcase of my recent work in full-stack web development" />
 
-        <div className="mb-6 flex flex-wrap items-center justify-center gap-2">
-          {FILTERS.map((filter) => (
-            <button
-              key={filter}
-              type="button"
-              onClick={() => setActiveFilter(filter)}
-              className={`rounded-full border px-4 py-1.5 text-sm font-medium transition ${
-                activeFilter === filter
-                  ? 'border-rose-600 bg-rose-600 text-white'
-                  : 'border-slate-200 text-slate-600 hover:border-rose-500 hover:text-rose-600 dark:border-slate-700 dark:text-slate-300'
-              }`}
-            >
-              {filter}
-            </button>
-          ))}
+        <div className="mb-6 flex justify-center">
+          <div className="relative flex max-w-full flex-wrap justify-center gap-1 rounded-3xl border border-slate-200/80 bg-white/70 p-1 backdrop-blur dark:border-slate-700/60 dark:bg-slate-900/50">
+            {indicator && (
+              <span
+                aria-hidden
+                className="absolute rounded-full bg-[var(--accent)] shadow-lg shadow-[color-mix(in_srgb,var(--accent)_35%,transparent)] transition-all duration-300 ease-out"
+                style={indicator}
+              />
+            )}
+            {FILTERS.map((filter) => (
+              <button
+                key={filter}
+                ref={(element) => {
+                  filterRefs.current[filter] = element
+                }}
+                type="button"
+                onClick={() => setActiveFilter(filter)}
+                aria-pressed={activeFilter === filter}
+                className={`relative z-10 rounded-full px-4 py-1.5 text-sm font-medium transition-colors duration-300 ${
+                  activeFilter === filter ? 'text-white' : 'text-slate-600 hover:text-[var(--accent)] dark:text-slate-300'
+                }`}
+              >
+                {filter}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="mx-auto mb-12 max-w-md">
-          <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 dark:border-slate-700 dark:bg-slate-800">
+          <label className="glass-input flex items-center gap-2 rounded-full px-4 py-2.5 focus-within:border-[var(--accent)] focus-within:shadow-[0_0_0_4px_color-mix(in_srgb,var(--accent)_14%,transparent)]">
             <Icon name="search" className="size-4 text-slate-400" />
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Search by title or tech..."
+              aria-label="Search projects"
               className="w-full bg-transparent text-sm text-slate-700 outline-none placeholder:text-slate-400 dark:text-slate-200"
             />
-          </div>
+          </label>
         </div>
 
         {loading && (
           <div className="grid grid-cols-2 gap-7 max-[700px]:grid-cols-1">
             {[1, 2].map((key) => (
-              <div key={key} className="h-[420px] animate-pulse rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800" />
+              <div key={key} className="glass-card h-[420px] animate-pulse rounded-2xl" />
             ))}
           </div>
         )}
@@ -96,18 +123,22 @@ export function PortfolioSection({ openGallery }: { openGallery: (gallery: Galle
             {filteredProjects.map((project) => {
               const images = project.images.map((image) => image.url)
               return (
-                <article className="reveal-item group flex overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_8px_30px_rgba(15,23,42,0.08)] transition duration-300 hover:-translate-y-1 hover:border-rose-500 hover:shadow-[0_8px_28px_rgba(225,29,72,0.16)] dark:border-slate-700 dark:bg-slate-800" key={project._id}>
+                <article onMouseMove={trackSpotlight} className="reveal-item glass-card group flex overflow-hidden rounded-2xl" key={project._id}>
                   <div className="flex w-full flex-col">
                     <button className="relative h-60 overflow-hidden bg-slate-100 text-left dark:bg-slate-900" onClick={() => openGallery({ title: project.title, images, index: 0 })} aria-label={`Open ${project.title} image gallery`}>
-                      <img src={images[0]} alt={`${project.title} project`} className="size-full object-cover transition duration-500 group-hover:scale-105" />
-                      <span className="absolute bottom-3 right-3 rounded-full bg-slate-950/75 px-3 py-1 text-xs font-semibold text-white backdrop-blur">View {images.length} images</span>
+                      <img src={images[0]} alt={`${project.title} project`} className="size-full object-cover transition duration-700 group-hover:scale-110" />
+                      <span aria-hidden className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent opacity-0 transition duration-500 group-hover:opacity-100" />
+                      <span className="absolute bottom-4 left-4 inline-flex translate-y-3 items-center gap-2 font-semibold text-white opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                        View project <span aria-hidden>→</span>
+                      </span>
+                      <span className="absolute right-3 top-3 rounded-full bg-slate-950/60 px-3 py-1 text-xs font-semibold text-white backdrop-blur">{images.length} images</span>
                     </button>
                     <div className="flex flex-1 flex-col p-6">
                       <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{project.title}</h3>
                       <p className="mt-3 flex-1 leading-7">{project.description}</p>
                       <div className="my-5 flex flex-wrap gap-2">
                         {project.techStack.map((tech) => (
-                          <span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-rose-600 hover:text-white dark:bg-slate-700 dark:text-slate-200" key={tech}>{tech}</span>
+                          <span className="rounded-full border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] px-3 py-1 text-xs font-medium text-[var(--accent)] dark:text-slate-200" key={tech}>{tech}</span>
                         ))}
                       </div>
                       <div className="flex flex-wrap gap-3">

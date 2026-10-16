@@ -1,16 +1,20 @@
-import { education, expertise, workExperience } from '../../data/portfolio'
+import { education, expertise, stats, workExperience } from '../../data/portfolio'
+import { CountUp } from '../ui/CountUp'
 import { Icon } from '../ui/Icon'
 import { SectionTitle } from '../ui/SectionTitle'
 import { Timeline } from '../ui/Timeline'
+import { trackSpotlight } from '../ui/spotlight'
 
 export function AboutSection() {
   return (
-    <section id="about" className="min-h-screen border-y border-slate-200/80 bg-gradient-to-br from-slate-100 via-white to-blue-50 px-8 py-20 dark:border-slate-700/40 dark:from-[#030b16] dark:via-[#04101e] dark:to-[#07182a] max-sm:px-5">
+    <section id="about" className="relative isolate overflow-hidden px-8 py-24 max-sm:px-5">
+      <div aria-hidden className="bg-dots pointer-events-none absolute inset-0 -z-10" />
+      <div aria-hidden className="pointer-events-none absolute -right-40 top-20 -z-10 size-[28rem] rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] blur-3xl" />
       <div className="mx-auto max-w-[1100px]">
-        <SectionTitle>About Me</SectionTitle>
+        <SectionTitle eyebrow="About me" title="Get to know" highlight="me" />
         <div className="reveal-item">
           <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
-            I&apos;m Samiullah Waheed and a <span className="text-rose-600">Web &amp; App Developer</span>.
+            I&apos;m Samiullah Waheed and a <span className="text-accent-gradient">Web &amp; App Developer</span>.
           </h3>
           <p className="mt-4 text-justify leading-7">
             I am a Web and App Developer who loves building efficient and scalable applications. With skills in various programming languages, I create high-quality software that meets client needs. I stay updated with the latest trends to ensure my work is modern and secure.
@@ -20,21 +24,35 @@ export function AboutSection() {
           </p>
         </div>
 
-        <div className="mt-16">
+        <div className="mt-12 grid grid-cols-4 gap-5 max-[820px]:grid-cols-2">
+          {stats.map((stat) => (
+            <div onMouseMove={trackSpotlight} className="reveal-item glass-card rounded-2xl p-6 text-center" key={stat.label}>
+              <p className="text-accent-gradient text-4xl font-bold tracking-tight">
+                <CountUp value={stat.value} />
+                {stat.suffix}
+              </p>
+              <p className="mt-2 text-sm font-medium text-slate-500 dark:text-slate-400">{stat.label}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-20">
           <div className="reveal-item text-center">
             <h3 className="text-3xl font-bold text-slate-900 dark:text-white">Technical Expertise</h3>
             <p className="mt-2 text-slate-500 dark:text-slate-400">A comprehensive overview of my development stack and tools.</p>
           </div>
           <div className="mt-10 grid grid-cols-2 gap-7 max-[680px]:grid-cols-1">
             {expertise.map((group) => (
-              <article className="reveal-item rounded-xl border border-transparent bg-white p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:border-rose-500 hover:shadow-[0_8px_28px_rgba(225,29,72,0.15)] dark:bg-slate-800" key={group.title}>
-                <div className="mb-4 flex items-center gap-3">
-                  <Icon name={group.icon} className="size-8 text-rose-600" />
+              <article onMouseMove={trackSpotlight} className="reveal-item glass-card rounded-2xl p-7" key={group.title}>
+                <div className="mb-5 flex items-center gap-3">
+                  <span className="grid size-12 place-items-center rounded-xl bg-gradient-to-br from-[var(--accent)] to-[color-mix(in_srgb,var(--accent)_55%,#38bdf8)] text-white shadow-lg shadow-[color-mix(in_srgb,var(--accent)_30%,transparent)]">
+                    <Icon name={group.icon} className="size-6" />
+                  </span>
                   <h4 className="text-xl font-bold text-slate-900 dark:text-white">{group.title}</h4>
                 </div>
                 <div className="flex flex-wrap gap-2.5">
                   {group.skills.map((skill) => (
-                    <span className="rounded-full bg-slate-100 px-4 py-2 text-sm font-medium text-slate-700 transition hover:scale-105 hover:bg-rose-600 hover:text-white dark:bg-slate-700 dark:text-slate-200" key={skill}>
+                    <span className="rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-sm font-medium text-slate-700 transition hover:-translate-y-0.5 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:shadow-[0_6px_18px_-6px_color-mix(in_srgb,var(--accent)_50%,transparent)] dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-200" key={skill}>
                       {skill}
                     </span>
                   ))}

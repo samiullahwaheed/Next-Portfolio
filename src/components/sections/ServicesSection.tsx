@@ -1,17 +1,22 @@
 import { services } from '../../data/portfolio'
 import { Icon } from '../ui/Icon'
 import { SectionTitle } from '../ui/SectionTitle'
+import { trackSpotlight } from '../ui/spotlight'
 
 export function ServicesSection() {
   return (
-    <section id="services" className="min-h-screen bg-slate-50 px-8 py-20 dark:bg-[#010713] max-sm:px-5">
+    <section id="services" className="relative isolate overflow-hidden px-8 py-24 max-sm:px-5">
+      <div aria-hidden className="pointer-events-none absolute -left-40 top-1/3 -z-10 size-[26rem] rounded-full bg-[color-mix(in_srgb,var(--accent)_8%,transparent)] blur-3xl" />
       <div className="mx-auto max-w-[1100px]">
-        <SectionTitle>Services</SectionTitle>
+        <SectionTitle eyebrow="What I do" title="Services I" highlight="offer" subtitle="From idea to launch — design, development and growth under one roof." />
         <div className="grid grid-cols-3 gap-7 max-[1172px]:grid-cols-2 max-[550px]:grid-cols-1">
-          {services.map((service) => (
-            <article className="reveal-item group rounded-xl border border-slate-200 bg-white p-7 text-center transition duration-300 hover:-translate-y-1 hover:border-rose-500 hover:shadow-xl dark:border-slate-700 dark:bg-slate-800" key={service.title}>
-              <div className="service-icon mx-auto mb-6 grid size-16 place-items-center rounded-full border border-[color-mix(in_srgb,var(--accent)_25%,transparent)] bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] text-[var(--accent)] transition duration-300 group-hover:bg-[var(--accent)] group-hover:text-white">
-                <Icon name={service.icon} className="size-9 transition duration-300 group-hover:rotate-6 group-hover:scale-110" />
+          {services.map((service, index) => (
+            <article onMouseMove={trackSpotlight} className="reveal-item glass-card group overflow-hidden rounded-2xl p-7" key={service.title}>
+              <span aria-hidden className="pointer-events-none absolute -right-1 -top-3 select-none text-7xl font-black text-slate-900/[0.05] transition duration-300 group-hover:text-[color-mix(in_srgb,var(--accent)_14%,transparent)] dark:text-white/[0.05]">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <div className="service-icon mb-6 grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-[var(--accent)] to-[color-mix(in_srgb,var(--accent)_55%,#38bdf8)] text-white shadow-lg shadow-[color-mix(in_srgb,var(--accent)_30%,transparent)]">
+                <Icon name={service.icon} className="size-7 transition duration-300 group-hover:rotate-6 group-hover:scale-110" />
               </div>
               <h3 className="mb-3 text-lg font-bold text-slate-900 dark:text-white">{service.title}</h3>
               <p className="leading-7">{service.description}</p>

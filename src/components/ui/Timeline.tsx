@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import type { TimelineEntry } from '../../types/portfolio'
 import { Icon } from './Icon'
+import { trackSpotlight } from './spotlight'
 
 type TimelineProps = {
   title: string
@@ -47,7 +48,8 @@ export function Timeline({ title, subtitle, entries, educationTimeline = false }
         <div className="space-y-9">
           {entries.map((entry, index) => (
             <article
-              className="reveal-item timeline-item relative rounded-xl border border-slate-200 bg-white p-6 shadow-[0_8px_30px_rgba(15,23,42,0.08)] transition duration-300 hover:border-rose-500 hover:shadow-[0_8px_28px_rgba(225,29,72,0.16)] dark:border-slate-700 dark:bg-slate-800"
+              onMouseMove={trackSpotlight}
+              className="reveal-item glass-card timeline-item rounded-2xl p-6"
               key={`${entry.organization}-${entry.date}-${entry.role}-${index}`}
             >
               <span className="timeline-dot absolute -left-[49px] top-7 size-4 rounded-full bg-rose-600 sm:-left-[65px]" aria-hidden="true"></span>
@@ -56,7 +58,7 @@ export function Timeline({ title, subtitle, entries, educationTimeline = false }
                   <Icon name={educationTimeline ? 'graduation' : 'briefcase'} className="size-5 text-rose-600" />
                   <h4 className="text-lg font-bold">{entry.organization}</h4>
                 </div>
-                <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-xs text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+                <span className="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_srgb,var(--accent)_8%,transparent)] px-3 py-1.5 text-xs text-slate-600 dark:bg-slate-700/60 dark:text-slate-300">
                   <Icon name="calendar" className="size-3.5 text-rose-600" />
                   {entry.date}
                 </span>
