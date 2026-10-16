@@ -158,7 +158,7 @@ function App() {
         setPickerOpen={setPickerOpen}
       />
 
-      <main className="pt-[96px]">
+      <main>
         <HomeSection roleIndex={roleIndex} />
         <AboutSection />
         <ServicesSection />

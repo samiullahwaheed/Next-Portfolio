@@ -40,6 +40,23 @@
 }
 
 @layer utilities {
+  /* Accent-tinted square grid that fades toward the edges */
+  .bg-hero-grid {
+    --grid-size: 48px;
+    --grid-line: color-mix(in srgb, var(--accent) 10%, transparent);
+    background-image:
+      linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+    background-size: var(--grid-size) var(--grid-size);
+    background-position: center top;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 40%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, #000 40%, transparent 100%);
+  }
+
+  .dark .bg-hero-grid {
+    --grid-line: color-mix(in srgb, var(--accent) 22%, rgb(255 255 255 / 0.04));
+  }
+
   .text-rose-600,
   .text-rose-500 {
     color: var(--accent) !important;
