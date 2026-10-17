@@ -19,11 +19,43 @@ export const accentColors = [
 
 export const roles = ['Software Engineer', 'MERN Stack Developer', 'Graphic Designer']
 
-export const expertise = [
-  { title: 'Front-End', icon: 'frontend' as IconName, skills: ['HTML/CSS', 'JavaScript', 'React.js', 'Tailwind CSS', 'Redux', 'Bootstrap', 'RTK Query'] },
-  { title: 'Back-End', icon: 'backend' as IconName, skills: ['Node.js', 'Express.js', 'Laravel'] },
-  { title: 'Databases', icon: 'database' as IconName, skills: ['MongoDB', 'MySQL', 'Firebase'] },
-  { title: 'Others', icon: 'tools' as IconName, skills: ['RESTful APIs', 'WebSockets', 'Agile/Scrum', 'Git'] },
+// Core-stack logos come from the Devicon set: `logo` is the path under icons/ without ".svg"
+export const DEVICON_BASE = 'https://cdn.jsdelivr.net/gh/devicons/devicon@v2.16.0/icons'
+
+export type Skill = { name: string; logo?: string }
+
+// Highlighted above the skill groups — the stack to be remembered for
+export const coreStack: Skill[] = [
+  { name: 'React', logo: 'react/react-original' },
+  { name: 'Next.js', logo: 'nextjs/nextjs-original' },
+  { name: 'Node.js', logo: 'nodejs/nodejs-original' },
+  { name: 'Python', logo: 'python/python-original' },
+  { name: 'MongoDB', logo: 'mongodb/mongodb-original' },
+  { name: 'Flutter', logo: 'flutter/flutter-original' },
+  { name: 'AWS', logo: 'amazonwebservices/amazonwebservices-original-wordmark' },
+]
+
+export const expertise: { title: string; icon: IconName; skills: string[] }[] = [
+  {
+    title: 'Front-End',
+    icon: 'frontend',
+    skills: ['React', 'Next.js', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'Redux Toolkit', 'RTK Query', 'HTML5', 'CSS3', 'Flutter'],
+  },
+  {
+    title: 'Back-End',
+    icon: 'backend',
+    skills: ['Node.js', 'Express.js', 'Python', 'PHP', 'Laravel', 'REST APIs', 'GraphQL', 'WebSockets', 'Socket.io'],
+  },
+  {
+    title: 'Databases',
+    icon: 'database',
+    skills: ['MongoDB', 'Mongoose', 'PostgreSQL', 'MySQL', 'Supabase', 'Firebase', 'Prisma', 'Redis'],
+  },
+  {
+    title: 'Tools & DevOps',
+    icon: 'tools',
+    skills: ['Git', 'GitHub', 'CI/CD', 'Docker', 'AWS', 'Vercel', 'Cloudinary', 'Postman', 'Jira', 'Figma', 'WordPress'],
+  },
 ]
 
 // Add, remove, or reorder objects here to update the experience timeline.
@@ -42,7 +74,7 @@ export const workExperience: TimelineEntry[] = [
           ongoing technical support, including debugging, updates, and system maintenance.
         </li>
         <li>
-          Working in the Projects support team, focusing on app optimization and managing updates for both Android
+          Working in the project support team, focusing on dashboards optimization and managing updates for both Android
           and iOS platforms.
         </li>
       </ul>
@@ -77,7 +109,7 @@ export const workExperience: TimelineEntry[] = [
       <ul className="list-disc space-y-1.5 pl-5 marker:text-[var(--accent)]">
         <li>
           Taught Computer Science to Matric-level students and provided practical training in 
-          <strong className="font-semibold text-slate-900 dark:text-white">Web Development</strong> and <strong className="font-semibold text-slate-900 dark:text-white">C programming</strong>.
+          <strong className="font-semibold text-slate-900 dark:text-white"> Web Development</strong> and <strong className="font-semibold text-slate-900 dark:text-white">C programming</strong>.
         </li>
       </ul>
     ),

@@ -88,7 +88,7 @@ export function ContactSection() {
             </ul>
           </div>
 
-          <form onSubmit={handleSubmit} className="reveal-item glass-card no-lift self-start rounded-3xl p-8 max-sm:p-5">
+          <form onSubmit={handleSubmit} className="reveal-item glass-card no-lift flex flex-col rounded-3xl p-8 max-sm:p-5">
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white">Send me a message</h3>
             <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">Fill in the form and I&apos;ll reply by email.</p>
             {error && <p className="mt-6 rounded-full bg-rose-600/10 px-6 py-2.5 text-center text-sm text-rose-600">{error}</p>}
@@ -97,7 +97,7 @@ export function ContactSection() {
               <input className={inputClass} type="email" value={email} onChange={(event) => setEmail(event.target.value)} name="email" placeholder="Email" aria-label="Email" required />
             </div>
             <input className={`mt-5 w-full ${inputClass}`} value={subject} onChange={(event) => setSubject(event.target.value)} name="subject" placeholder="Subject" aria-label="Subject" required />
-            <textarea className="glass-input mt-5 min-h-40 w-full resize-y rounded-3xl px-6 py-4 text-slate-800 dark:text-white" value={message} onChange={(event) => setMessage(event.target.value)} name="message" placeholder="Message" aria-label="Message" required />
+            <textarea className="glass-input mt-5 min-h-40 w-full flex-1 resize-none rounded-3xl px-6 py-4 text-slate-800 dark:text-white" value={message} onChange={(event) => setMessage(event.target.value)} name="message" placeholder="Message" aria-label="Message" required />
             <button className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--accent)] px-10 py-3.5 font-semibold text-white shadow-lg shadow-[color-mix(in_srgb,var(--accent)_30%,transparent)] transition hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-60 disabled:hover:translate-y-0" type="submit" disabled={submitting}>
               {submitting ? 'Sending…' : 'Send Message'}
               {!submitting && <span aria-hidden>→</span>}

@@ -1,4 +1,4 @@
-import { certifications, education, expertise, stats, workExperience } from '../../data/portfolio'
+import { DEVICON_BASE, certifications, coreStack, education, expertise, stats, workExperience, type Skill } from '../../data/portfolio'
 import { CountUp } from '../ui/CountUp'
 import { Icon } from '../ui/Icon'
 import { SectionTitle } from '../ui/SectionTitle'
@@ -41,18 +41,35 @@ export function AboutSection() {
             <h3 className="text-3xl font-bold text-slate-900 dark:text-white">Technical Expertise</h3>
             <p className="mt-2 text-slate-500 dark:text-slate-400">A comprehensive overview of my development stack and tools.</p>
           </div>
-          <div className="mt-10 grid grid-cols-2 gap-7 max-[680px]:grid-cols-1">
+          {/* Core stack */}
+          <div className="reveal-item mt-8 flex flex-wrap items-center justify-center gap-3">
+            <span className="mr-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">Core stack</span>
+            {coreStack.map((skill) => (
+              <span
+                key={skill.name}
+                className="inline-flex items-center gap-2.5 rounded-2xl border border-[color-mix(in_srgb,var(--accent)_30%,transparent)] bg-[color-mix(in_srgb,var(--accent)_8%,transparent)] py-2 pr-4 pl-2 font-semibold text-slate-900 shadow-[0_8px_24px_-12px_color-mix(in_srgb,var(--accent)_50%,transparent)] dark:text-white"
+              >
+                <SkillLogo skill={skill} size="size-8" />
+                {skill.name}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-8 grid grid-cols-2 gap-6 max-[680px]:grid-cols-1">
             {expertise.map((group) => (
-              <article onMouseMove={trackSpotlight} className="reveal-item glass-card rounded-2xl p-7" key={group.title}>
+              <article onMouseMove={trackSpotlight} className="reveal-item glass-card rounded-2xl p-6" key={group.title}>
                 <div className="mb-5 flex items-center gap-3">
-                  <span className="grid size-12 place-items-center rounded-xl bg-gradient-to-br from-[var(--accent)] to-[color-mix(in_srgb,var(--accent)_55%,#38bdf8)] text-white shadow-lg shadow-[color-mix(in_srgb,var(--accent)_30%,transparent)]">
-                    <Icon name={group.icon} className="size-6" />
+                  <span className="grid size-11 place-items-center rounded-xl bg-gradient-to-br from-[var(--accent)] to-[color-mix(in_srgb,var(--accent)_55%,#38bdf8)] text-white shadow-lg shadow-[color-mix(in_srgb,var(--accent)_30%,transparent)]">
+                    <Icon name={group.icon} className="size-5" />
                   </span>
-                  <h4 className="text-xl font-bold text-slate-900 dark:text-white">{group.title}</h4>
+                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">{group.title}</h4>
                 </div>
-                <div className="flex flex-wrap gap-2.5">
+                <div className="flex flex-wrap gap-2">
                   {group.skills.map((skill) => (
-                    <span className="rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-sm font-medium text-slate-700 transition hover:-translate-y-0.5 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:shadow-[0_6px_18px_-6px_color-mix(in_srgb,var(--accent)_50%,transparent)] dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-200" key={skill}>
+                    <span
+                      key={skill}
+                      className="rounded-full border border-slate-200 bg-white/70 px-4 py-1.5 text-sm font-medium text-slate-700 transition hover:-translate-y-0.5 hover:border-[var(--accent)] hover:text-[var(--accent)] hover:shadow-[0_6px_18px_-6px_color-mix(in_srgb,var(--accent)_50%,transparent)] dark:border-slate-700 dark:bg-slate-900/40 dark:text-slate-200"
+                    >
                       {skill}
                     </span>
                   ))}
@@ -67,5 +84,18 @@ export function AboutSection() {
         <Timeline title="Certifications" subtitle="Professional certificates I have earned" entries={certifications} icon="award" />
       </div>
     </section>
+  )
+}
+
+// Logos sit on a white tile so monochrome marks (e.g. Next.js) stay visible in dark mode
+function SkillLogo({ skill, size }: { skill: Skill; size: string }) {
+  return (
+    <span className={`${size} grid shrink-0 place-items-center rounded-full bg-white shadow-sm ring-1 ring-slate-200/80 dark:ring-white/10`}>
+      {skill.logo ? (
+        <img src={`${DEVICON_BASE}/${skill.logo}.svg`} alt="" loading="lazy" className="size-[62%] object-contain" />
+      ) : (
+        <span className="size-1.5 rounded-full bg-[var(--accent)]" />
+      )}
+    </span>
   )
 }
