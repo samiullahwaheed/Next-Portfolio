@@ -1,6 +1,7 @@
 import { DEVICON_BASE, certifications, coreStack, education, expertise, stats, workExperience, type Skill } from '../../data/portfolio'
 import { CountUp } from '../ui/CountUp'
 import { Icon } from '../ui/Icon'
+import { InteractiveDots } from '../ui/InteractiveDots'
 import { SectionTitle } from '../ui/SectionTitle'
 import { Timeline } from '../ui/Timeline'
 import { trackSpotlight } from '../ui/spotlight'
@@ -8,7 +9,7 @@ import { trackSpotlight } from '../ui/spotlight'
 export function AboutSection() {
   return (
     <section id="about" className="relative isolate overflow-hidden px-8 py-16 max-sm:px-5 max-sm:py-12">
-      <div aria-hidden className="bg-dots pointer-events-none absolute inset-0 -z-10" />
+      <InteractiveDots />
       <div aria-hidden className="pointer-events-none absolute -right-40 top-20 -z-10 size-[28rem] rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] blur-3xl" />
       <div className="mx-auto max-w-[1100px]">
         <SectionTitle eyebrow="About me" title="Get to know" highlight="me" />

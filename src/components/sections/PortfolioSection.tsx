@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import type { ProjectDoc } from '../../types/project'
 import { ProjectCard, ProjectCardSkeleton } from '../project/ProjectCard'
+import { InteractiveDots } from '../ui/InteractiveDots'
 import { SectionTitle } from '../ui/SectionTitle'
 
 // Homepage shows a curated two-row showcase; the full archive lives at /projects
@@ -31,7 +32,7 @@ export function PortfolioSection() {
 
   return (
     <section id="portfolio" className="relative isolate overflow-hidden px-8 py-16 max-sm:px-5 max-sm:py-12">
-      <div aria-hidden className="bg-dots pointer-events-none absolute inset-0 -z-10" />
+      <InteractiveDots />
       <div aria-hidden className="pointer-events-none absolute -right-48 bottom-20 -z-10 size-[30rem] rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] blur-3xl" />
       <div className="mx-auto max-w-[1180px]">
         <SectionTitle eyebrow="Portfolio" title="Featured" highlight="projects" subtitle="A selection of my recent work in full-stack web development" />

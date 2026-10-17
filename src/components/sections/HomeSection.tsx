@@ -1,11 +1,16 @@
 import { roles } from '../../data/portfolio'
 import { Icon } from '../ui/Icon'
+import { HeroGridTrail } from '../ui/HeroGridTrail'
 import { Typewriter } from '../ui/Typewriter'
 
 export function HomeSection() {
   return (
-    <section id="home" className="relative isolate flex min-h-screen items-center overflow-hidden px-8 pt-36 pb-20 max-sm:px-5 max-sm:pt-32 dark:bg-[#010713]">
+    <section
+      id="home"
+      className="relative isolate flex min-h-screen items-center overflow-hidden px-8 pt-36 pb-20 max-sm:px-5 max-sm:pt-32 dark:bg-[#010713]"
+    >
       <div aria-hidden className="bg-hero-grid pointer-events-none absolute inset-0 -z-10" />
+      <HeroGridTrail />
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_78%_30%,color-mix(in_srgb,var(--accent)_18%,transparent),transparent_32%)]" />
       <div aria-hidden className="pointer-events-none absolute -bottom-10 -left-40 -z-10 size-96 rounded-full bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] blur-3xl" />
       <div className="mx-auto grid w-full max-w-[1100px] grid-cols-[1.25fr_0.75fr] items-center gap-14 max-[740px]:grid-cols-1">

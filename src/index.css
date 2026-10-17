@@ -42,7 +42,7 @@
 @layer utilities {
   /* Accent-tinted square grid that fades toward the edges */
   .bg-hero-grid {
-    --grid-size: 48px;
+    --grid-size: 40px;
     --grid-line: color-mix(in srgb, var(--accent) 10%, transparent);
     background-image:
       linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
@@ -81,6 +81,17 @@
 
   .no-scrollbar::-webkit-scrollbar {
     display: none;
+  }
+
+  /* Mouse-following canvas of enlarged dots over .bg-dots (components/ui/InteractiveDots.tsx) */
+  .dots-glow {
+    opacity: 0;
+    transition: opacity 350ms ease;
+    will-change: transform;
+  }
+
+  .dots-glow.is-active {
+    opacity: 1;
   }
 
   .text-accent-gradient {
