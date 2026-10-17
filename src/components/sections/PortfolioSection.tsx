@@ -30,7 +30,7 @@ export function PortfolioSection() {
   }, [])
 
   return (
-    <section id="portfolio" className="relative isolate overflow-hidden px-8 py-24 max-sm:px-5">
+    <section id="portfolio" className="relative isolate overflow-hidden px-8 py-16 max-sm:px-5 max-sm:py-12">
       <div aria-hidden className="bg-dots pointer-events-none absolute inset-0 -z-10" />
       <div aria-hidden className="pointer-events-none absolute -right-48 bottom-20 -z-10 size-[30rem] rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] blur-3xl" />
       <div className="mx-auto max-w-[1180px]">
@@ -44,7 +44,7 @@ export function PortfolioSection() {
         {!loading && projects.length === 0 && <p className="text-center text-slate-400">No projects yet.</p>}
 
         {!loading && total > 0 && (
-          <div className="reveal-item mt-12 flex justify-center">
+          <div className="reveal-item mt-10 flex justify-center">
             <Link
               href="/projects"
               className="group inline-flex items-center gap-3 rounded-full border border-[var(--accent)] bg-white/70 py-2 pr-2 pl-6 font-semibold text-[var(--accent)] backdrop-blur transition hover:bg-[var(--accent)] hover:text-white hover:shadow-lg hover:shadow-[color-mix(in_srgb,var(--accent)_30%,transparent)] dark:bg-slate-900/50"

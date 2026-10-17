@@ -14,6 +14,7 @@ export function Icon({ name, className = 'size-5' }: { name: IconName; className
     close: <path d="m6 6 12 12M18 6 6 18" />,
     briefcase: <><rect x="3" y="7" width="18" height="13" rx="2" /><path d="M8 7V4h8v3M3 12h18" /></>,
     calendar: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 10h18" /></>,
+    award: <><circle cx="12" cy="9" r="6" /><path d="m8.5 14-1.5 8 5-3 5 3-1.5-8" /></>,
     graduation: <><path d="m2 10 10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5M22 10v6" /></>,
     frontend: <><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 9h18M8 6h.01" /></>,
     backend: <><rect x="4" y="4" width="16" height="6" rx="1" /><rect x="4" y="14" width="16" height="6" rx="1" /><path d="M8 7h.01M8 17h.01" /></>,

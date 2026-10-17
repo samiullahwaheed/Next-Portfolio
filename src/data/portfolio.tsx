@@ -96,39 +96,28 @@ export const education: TimelineEntry[] = [
       </>
     ),
   },
+]
+
+// Each link renders as a "Verify" button on the card
+export const certifications: TimelineEntry[] = [
   {
-    organization: 'IMCB F-7/3 Islamabad',
-    date: '2019 - 2021',
-    role: 'Pre-Engineering',
-    description: (
-      <>
-        Completed pre-engineering studies with a strong foundation in mathematics, physics,
-        and chemistry, obtaining{' '}
-        <span className="font-semibold text-rose-600">64%</span> marks.
-      </>
-    ),
+    organization: 'Meta · Coursera',
+    date: 'Jun 2025',
+    role: 'Front-End Developer Professional Certificate',
+    link: { label: 'Verify', href: 'https://www.coursera.org/account/accomplishments/specialization/certificate/S6GVX1XYXHVD' },
   },
   {
-    organization: 'Minhaj Model School',
-    date: '2017 - 2019',
-    role: 'Matriculation',
-    description: (
-      <>
-        Completed high school education with a focus on science subjects and computer
-        fundamentals, achieving{' '}
-        <span className="font-semibold text-rose-600">76%</span> marks.
-      </>
-    ),
+    organization: 'Amazon Web Services (AWS)',
+    date: 'Aug 2026',
+    role: 'AWS Certified Solutions Architect – Associate',
+    link: { label: 'Verify', href: 'https://cp.certmetrics.com/amazon/en/public/verify/credential/f2f5e05678bd4604a12ba9e8ccce1f48' },
   },
 ]
 
 export const services = [
   { title: 'Mobile App Development', icon: 'mobile' as IconName, description: 'Creating responsive and functional mobile applications for various platforms.' },
   { title: 'Web Development', icon: 'web' as IconName, description: 'Building and maintaining websites, ensuring they are functional, user-friendly, and visually appealing.' },
-  { title: 'Graphic Designing', icon: 'palette' as IconName, description: 'Crafting visual content to communicate messages through typography, imagery, color, and form.' },
-  { title: 'Software Development', icon: 'code' as IconName, description: 'Developing tailored software solutions to meet specific business needs and requirements.' },
   { title: 'SEO Optimization', icon: 'search' as IconName, description: 'Enhancing website visibility and search engine ranking through various optimization techniques.' },
-  { title: 'Digital Marketing', icon: 'marketing' as IconName, description: 'Promoting brands and products through digital channels to reach and engage target audiences.' },
 ]
 
 // Projects have moved to MongoDB — see src/models/Project.ts and scripts/seed.mjs for the

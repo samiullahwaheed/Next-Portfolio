@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import type { TimelineEntry } from '../../types/portfolio'
+import type { IconName, TimelineEntry } from '../../types/portfolio'
 import { Icon } from './Icon'
 import { trackSpotlight } from './spotlight'
 
@@ -7,10 +7,10 @@ type TimelineProps = {
   title: string
   subtitle: string
   entries: TimelineEntry[]
-  educationTimeline?: boolean
+  icon?: IconName
 }
 
-export function Timeline({ title, subtitle, entries, educationTimeline = false }: TimelineProps) {
+export function Timeline({ title, subtitle, entries, icon = 'briefcase' }: TimelineProps) {
   const timelineRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -37,15 +37,15 @@ export function Timeline({ title, subtitle, entries, educationTimeline = false }
   }, [entries])
 
   return (
-    <div ref={timelineRef} className="timeline-section mt-20" data-timeline>
-      <div className="reveal-item mb-12 text-center">
+    <div ref={timelineRef} className="timeline-section mt-14" data-timeline>
+      <div className="reveal-item mb-8 text-center">
         <h3 className="text-3xl font-bold text-slate-900 dark:text-white">{title}</h3>
         <p className="mt-2 text-slate-500 dark:text-slate-400">{subtitle}</p>
       </div>
       <div className="timeline-track relative ml-3 pl-10 sm:ml-7 sm:pl-14">
         <span className="timeline-line-base" aria-hidden="true"></span>
         <span className="timeline-line-progress" aria-hidden="true"></span>
-        <div className="space-y-9">
+        <div className="space-y-6">
           {entries.map((entry, index) => (
             <article
               onMouseMove={trackSpotlight}
@@ -55,7 +55,7 @@ export function Timeline({ title, subtitle, entries, educationTimeline = false }
               <span className="timeline-dot absolute -left-[49px] top-7 size-4 rounded-full bg-rose-600 sm:-left-[65px]" aria-hidden="true"></span>
               <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
                 <div className="flex items-center gap-2 text-slate-900 dark:text-white">
-                  <Icon name={educationTimeline ? 'graduation' : 'briefcase'} className="size-5 text-rose-600" />
+                  <Icon name={icon} className="size-5 text-rose-600" />
                   <h4 className="text-lg font-bold">{entry.organization}</h4>
                 </div>
                 <span className="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_srgb,var(--accent)_8%,transparent)] px-3 py-1.5 text-xs text-slate-600 dark:bg-slate-700/60 dark:text-slate-300">
@@ -63,8 +63,19 @@ export function Timeline({ title, subtitle, entries, educationTimeline = false }
                   {entry.date}
                 </span>
               </div>
-              <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+              <div className="mb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
                 <h5 className="font-semibold text-rose-600">{entry.role}</h5>
+                {entry.link?.href && (
+                  <a
+                    href={entry.link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-[color-mix(in_srgb,var(--accent)_35%,transparent)] px-3 py-1 text-xs font-semibold text-[var(--accent)] transition hover:bg-[var(--accent)] hover:text-white"
+                  >
+                    <Icon name="check" className="size-3.5" />
+                    {entry.link.label}
+                  </a>
+                )}
                 {entry.location && (
                   <span className="inline-flex items-center gap-1 text-sm italic text-slate-500 dark:text-slate-400">
                     <Icon name="location" className="size-3.5 not-italic" />
@@ -73,7 +84,7 @@ export function Timeline({ title, subtitle, entries, educationTimeline = false }
                 )}
               </div>
               {/* div, not p: descriptions may contain bullet lists */}
-              <div className="leading-7 text-slate-600 dark:text-slate-300">{entry.description}</div>
+              {entry.description && <div className="leading-7 text-slate-600 dark:text-slate-300">{entry.description}</div>}
             </article>
           ))}
         </div>

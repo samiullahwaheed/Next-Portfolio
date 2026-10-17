@@ -40,13 +40,16 @@ export type IconName =
   | 'star'
   | 'grid'
   | 'image'
+  | 'award'
 
 export type TimelineEntry = {
   organization: string
   date: string
   role: string
   location?: string
-  description: ReactNode
+  description?: ReactNode
+  // e.g. a certificate's "Verify" link; hidden while href is empty
+  link?: { label: string; href: string }
 }
 
 export type GalleryState = {

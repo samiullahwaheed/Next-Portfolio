@@ -7,7 +7,7 @@ type SectionTitleProps = {
 
 export function SectionTitle({ eyebrow, title, highlight, subtitle }: SectionTitleProps) {
   return (
-    <div className="reveal-item mb-14 text-center">
+    <div className="reveal-item mb-10 text-center">
       <span className="inline-flex items-center gap-2 rounded-full border border-[color-mix(in_srgb,var(--accent)_25%,transparent)] bg-[color-mix(in_srgb,var(--accent)_8%,transparent)] px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
         <span aria-hidden>✦</span>
         {eyebrow}

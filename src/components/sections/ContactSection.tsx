@@ -50,7 +50,7 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="relative isolate overflow-hidden px-8 py-24 max-sm:px-5">
+    <section id="contact" className="relative isolate overflow-hidden px-8 py-16 max-sm:px-5 max-sm:py-12">
       <div aria-hidden className="pointer-events-none absolute -left-32 top-24 -z-10 size-[26rem] rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] blur-3xl" />
       <div aria-hidden className="pointer-events-none absolute -right-32 bottom-0 -z-10 size-[26rem] rounded-full bg-[color-mix(in_srgb,var(--accent)_8%,transparent)] blur-3xl" />
       <div className="mx-auto max-w-[1100px]">

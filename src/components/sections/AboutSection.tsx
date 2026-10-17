@@ -1,4 +1,4 @@
-import { education, expertise, stats, workExperience } from '../../data/portfolio'
+import { certifications, education, expertise, stats, workExperience } from '../../data/portfolio'
 import { CountUp } from '../ui/CountUp'
 import { Icon } from '../ui/Icon'
 import { SectionTitle } from '../ui/SectionTitle'
@@ -7,7 +7,7 @@ import { trackSpotlight } from '../ui/spotlight'
 
 export function AboutSection() {
   return (
-    <section id="about" className="relative isolate overflow-hidden px-8 py-24 max-sm:px-5">
+    <section id="about" className="relative isolate overflow-hidden px-8 py-16 max-sm:px-5 max-sm:py-12">
       <div aria-hidden className="bg-dots pointer-events-none absolute inset-0 -z-10" />
       <div aria-hidden className="pointer-events-none absolute -right-40 top-20 -z-10 size-[28rem] rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] blur-3xl" />
       <div className="mx-auto max-w-[1100px]">
@@ -24,7 +24,7 @@ export function AboutSection() {
           </p>
         </div>
 
-        <div className="mt-12 grid grid-cols-4 gap-5 max-[820px]:grid-cols-2">
+        <div className="mt-10 grid grid-cols-4 gap-5 max-[820px]:grid-cols-2">
           {stats.map((stat) => (
             <div onMouseMove={trackSpotlight} className="reveal-item glass-card rounded-2xl p-6 text-center" key={stat.label}>
               <p className="text-accent-gradient text-4xl font-bold tracking-tight">
@@ -36,7 +36,7 @@ export function AboutSection() {
           ))}
         </div>
 
-        <div className="mt-20">
+        <div className="mt-14">
           <div className="reveal-item text-center">
             <h3 className="text-3xl font-bold text-slate-900 dark:text-white">Technical Expertise</h3>
             <p className="mt-2 text-slate-500 dark:text-slate-400">A comprehensive overview of my development stack and tools.</p>
@@ -63,7 +63,8 @@ export function AboutSection() {
         </div>
 
         <Timeline title="Work Experience" subtitle="My professional journey in web development" entries={workExperience} />
-        <Timeline title="Education" subtitle="My academic background and qualifications" entries={education} educationTimeline />
+        <Timeline title="Education" subtitle="My academic background and qualifications" entries={education} icon="graduation" />
+        <Timeline title="Certifications" subtitle="Professional certificates I have earned" entries={certifications} icon="award" />
       </div>
     </section>
   )
