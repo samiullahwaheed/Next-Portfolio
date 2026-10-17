@@ -41,6 +41,7 @@ export type IconName =
   | 'grid'
   | 'image'
   | 'award'
+  | 'whatsapp'
 
 export type TimelineEntry = {
   organization: string

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 import '../index.css'
+import { WhatsAppButton } from '@/components/layout/WhatsAppButton'
 import { themeInitScript } from '@/lib/theme'
 
 const siteUrl = 'https://samiullahwaheed.vercel.app'
@@ -139,7 +140,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <WhatsAppButton />
+      </body>
     </html>
   )
 }

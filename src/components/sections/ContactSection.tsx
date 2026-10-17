@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import type { IconName } from '../../types/portfolio'
+import { WHATSAPP_URL } from '../layout/WhatsAppButton'
 import { Icon } from '../ui/Icon'
 import { SectionTitle } from '../ui/SectionTitle'
 import { trackSpotlight } from '../ui/spotlight'
@@ -8,6 +9,7 @@ const inputClass = 'glass-input h-13 rounded-full px-6 text-slate-800 dark:text-
 
 const contactItems = [
   { icon: 'phone' as IconName, title: 'Call Me', content: '+92 3239865230', href: 'tel:+923239865230' },
+  { icon: 'whatsapp' as IconName, title: 'WhatsApp', content: '+92 323 9865230', href: WHATSAPP_URL },
   { icon: 'email' as IconName, title: 'Email', content: 'samiullahwaheed@gmail.com', href: 'mailto:samiullahwaheed@gmail.com' },
   { icon: 'linkedin' as IconName, title: 'LinkedIn', content: 'in/samiullah-waheed', href: 'https://www.linkedin.com/in/samiullah-waheed/' },
   { icon: 'github' as IconName, title: 'GitHub', content: 'SamiullahWaheed', href: 'https://github.com/SamiullahWaheed' },
